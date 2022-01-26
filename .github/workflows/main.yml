@@ -1,0 +1,12 @@
+on: [push]
+jobs:
+  heimdall_tools_conversion:
+    runs-on: ubuntu-latest
+    name: SAF CLI Convert ASFF to HDF
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Convert ASFF
+        uses: mitre/saf_action@main
+        with:
+          command_string: 'saf convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'

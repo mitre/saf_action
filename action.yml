@@ -1,0 +1,14 @@
+name: 'SAF CLI Action'
+author: The MITRE Corporation
+description: >
+  Run SAF CLI commands'
+branding:
+  icon: 'repeat'
+  color: 'gray-dark'
+inputs:
+  command_string:
+    description: 'Command, including flags, to be executed by SAF CLI'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
