@@ -5,10 +5,12 @@ GitHub Action for [SAF CLI](https://github.com/mitre/saf)
 ### Input
 #### `command_string` (Required)
 
-Command string to be executed by SAF CLI.
+Command string to be executed by SAF CLI. The action will run `saf <command_string>`.
+
 Example:
 
 * `convert:asff2hdf -i asff-findings.json -o output-file-name.json`
+* More examples can be found at [SAF CLI Usage](https://github.com/mitre/saf#usage)
 
 ### Output
 As determined by input command.
@@ -19,7 +21,7 @@ This action does not use any GitHub secrets at this time.
 
 ## Environment Variables
 
-Internally, the action's entrypoint uses the environment variables passed via action inputs. GitHub converts inputs to environment variables by prefixing them with `INPUT_`. Example: `INPUT_COMMAND_STRING`.
+Internally, the action's entrypoint uses the environment variable passed via action input. GitHub converts inputs to environment variables by prefixing them with `INPUT_`. Example: `INPUT_COMMAND_STRING`.
 
 ## Example
 
@@ -28,7 +30,7 @@ Below is an example action.
 ```
 on: [push]
 jobs:
-  heimdall_tools_conversion:
+  saf_hdf_conversion:
     runs-on: ubuntu-latest
     name: SAF CLI Convert ASFF to HDF
     steps:
@@ -37,7 +39,13 @@ jobs:
       - name: Convert ASFF
         uses: mitre/saf_action@main
         with:
-          command_string: 'saf convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
+          command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
+      - name: Artifacts
+        uses: actions/upload-artifact@v1
+        if: success()
+        with:
+          name: asff
+          path: asff_sample_hdf.json
 ```
 
 ## Contributing, Issues and Support
