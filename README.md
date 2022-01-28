@@ -1,4 +1,4 @@
-# saf_action
+# (WIP) saf_action
 GitHub Action for [SAF CLI](https://github.com/mitre/saf)
 
 ## Input and Output Arguments
@@ -13,6 +13,7 @@ Example:
 * More examples can be found at [SAF CLI Usage](https://github.com/mitre/saf#usage)
 
 ### Output
+
 As determined by input command.
 
 ## Secrets
