@@ -61,7 +61,7 @@ Please feel free to contact us by **opening an issue** on the issue board, or, a
 
 ### NOTICE
 
-© 2019-2020 The MITRE Corporation.
+© 2022 The MITRE Corporation.
 
 Approved for Public Release; Distribution Unlimited. Case Number 18-3678.
 
