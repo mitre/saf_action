@@ -1,4 +1,4 @@
-FROM mitre/saf:v1
+FROM mitre/saf
 
 COPY entrypoint.sh /entrypoint.sh
 

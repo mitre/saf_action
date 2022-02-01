@@ -24,7 +24,9 @@ This action does not use any GitHub secrets at this time.
 
 Internally, the action's entrypoint uses the environment variable passed via action input. GitHub converts inputs to environment variables by prefixing them with `INPUT_`. Example: `INPUT_COMMAND_STRING`.
 
-## Example
+## Usage
+
+### Example
 
 Below is an example action.
 
@@ -47,6 +49,24 @@ jobs:
         with:
           name: asff
           path: asff_sample_hdf.json
+```
+
+### Version
+
+Reference the latest version of SAF CLI using the latest SAF CLI Action:
+
+```
+uses: mitre/saf_action@main
+with:
+  command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
+```
+
+Or reference the latest of a major version of SAF CLI using a tag specified by "v<major-version-number>":
+
+```
+uses: mitre/saf_action:v1
+with:
+  command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
 ```
 
 ## Contributing, Issues and Support
