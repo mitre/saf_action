@@ -61,7 +61,7 @@ with:
   command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
 ```
 
-Or reference the latest of a major version of SAF CLI using a tag specified by "v<major-version-number>":
+Or reference the latest of a major version of SAF CLI using a tag specified by v<major-version-number>:
 
 ```
 uses: mitre/saf_action:v1
