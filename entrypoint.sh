@@ -3,7 +3,6 @@
 set -e
 
 if [ -n "$INPUT_COMMAND_STRING" ]; then
-  echo "Using $(saf version)"
   saf $INPUT_COMMAND_STRING
 else
   echo "SAF CLI Command String argument is required.";
