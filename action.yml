@@ -1,7 +1,7 @@
 name: 'SAF CLI Action'
 author: The MITRE Corporation
 description: >
-  Run SAF CLI commands'
+  Run SAF CLI commands
 branding:
   icon: 'repeat'
   color: 'gray-dark'

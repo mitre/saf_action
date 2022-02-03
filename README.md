@@ -1,5 +1,5 @@
 # (WIP) saf_action
-GitHub Action for [SAF CLI](https://github.com/mitre/saf)
+GitHub Action for the [SAF CLI](https://github.com/mitre/saf)
 
 ## Input and Output Arguments
 ### Input
@@ -24,9 +24,7 @@ This action does not use any GitHub secrets at this time.
 
 Internally, the action's entrypoint uses the environment variable passed via action input. GitHub converts inputs to environment variables by prefixing them with `INPUT_`. Example: `INPUT_COMMAND_STRING`.
 
-## Usage
-
-### Example
+## Example
 
 Below is an example action.
 
@@ -40,7 +38,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Convert ASFF
-        uses: mitre/saf_action@main
+        uses: mitre/saf_action@v1
         with:
           command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
       - name: Artifacts
@@ -51,33 +49,15 @@ jobs:
           path: asff_sample_hdf.json
 ```
 
-### Version
-
-Reference the latest version of SAF CLI using the latest SAF CLI Action:
-
-```
-uses: mitre/saf_action@main
-with:
-  command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
-```
-
-Or reference the latest of a major version of SAF CLI using the SAF CLI Action branch corresponding to the major release:
-
-```
-uses: mitre/saf_action@v1
-with:
-  command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
-```
-
 ## Contributing, Issues and Support
 
 ### Contributing
 
-Please feel free to look through our issues, make a fork and submit _PRs_ and improvements. We love hearing from our end-users and the community and will be happy to engage with you on suggestions, updates, fixes or new capabilities.
+Please feel free to look through our issues, make a fork and submit PRs and improvements. We love hearing from our end-users and the community and will be happy to engage with you on suggestions, updates, fixes or new capabilities.
 
 ### Issues and Support
 
-Please feel free to contact us by **opening an issue** on the issue board, or, at [inspec@mitre.org](mailto:inspec@mitre.org) should you have any suggestions, questions or issues. If you have more general questions about the use of our software or other concerns, please contact us at [opensource@mitre.org](mailto:opensource@mitre.org).
+Please feel free to contact us by **opening an issue** on the issue board, or, at [saf@mitre.org](mailto:saf@mitre.org) should you have any suggestions, questions or issues.
 
 ### NOTICE
 
