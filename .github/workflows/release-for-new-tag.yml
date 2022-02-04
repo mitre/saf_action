@@ -9,7 +9,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Get Release Notes
+        run: |
+          echo "$(git tag -l --sort=taggerdate --format="%(contents:subject)" | tail -n 1)" > RELEASE_NOTES
+          echo "This release corresponds to the latest of the same major version for the SAF CLI." >> RELEASE_NOTES
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body: "This release corresponds to the latest of the same major version for the SAF CLI."
+          body_path: RELEASE_NOTES
