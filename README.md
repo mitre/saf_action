@@ -38,7 +38,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Convert ASFF
-        uses: mitre/saf_action@v1
+        uses: mitre/saf_action@v1.1.0
         with:
           command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
       - name: Artifacts
