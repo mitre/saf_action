@@ -19,3 +19,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: RELEASE_NOTES
+          draft: true
