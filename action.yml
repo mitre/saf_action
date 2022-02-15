@@ -10,5 +10,5 @@ inputs:
     description: 'Command, including flags and inputs, to be executed by SAF CLI'
     required: true
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node16'
+  main: 'index.js'

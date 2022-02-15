@@ -20,10 +20,6 @@ As determined by input command.
 
 This action does not use any GitHub secrets at this time.
 
-## Environment Variables
-
-Internally, the action's entrypoint uses the environment variable passed via action input. GitHub converts inputs to environment variables by prefixing them with `INPUT_`. Example: `INPUT_COMMAND_STRING`.
-
 ## Example
 
 Below is an example action.
