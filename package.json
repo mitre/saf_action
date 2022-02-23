@@ -11,8 +11,8 @@
     "url": "git+https://github.com/mitre/saf_action.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "MITRE",
+  "license": "Apache-2.0 MITRE license",
   "bugs": {
     "url": "https://github.com/mitre/saf_action/issues"
   },

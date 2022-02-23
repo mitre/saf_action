@@ -11,6 +11,7 @@ Example:
 
 * `convert:asff2hdf -i asff-findings.json -o output-file-name.json`
 * More examples can be found at [SAF CLI Usage](https://github.com/mitre/saf#usage)
+* NOTE: This action does not support `view:heimdall`.
 
 ### Output
 
@@ -34,7 +35,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Convert ASFF
-        uses: mitre/saf_action@v1.1.0
+        uses: mitre/saf_action@v1
         with:
           command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
       - name: Artifacts
