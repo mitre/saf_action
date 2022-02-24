@@ -10,9 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/mitre/saf_action.git"
   },
-  "keywords": [],
-  "author": "MITRE",
-  "license": "Apache-2.0 MITRE license",
+  "keywords": ["mitre-saf", "mitre", "SAF"],
+  "author": "The MITRE SAF",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/mitre/saf_action/issues"
   },
