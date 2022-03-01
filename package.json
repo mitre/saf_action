@@ -1,0 +1,24 @@
+{
+  "name": "saf_action",
+  "version": "1.2.0",
+  "description": "GitHub Action for the [SAF CLI](https://github.com/mitre/saf)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mitre/saf_action.git"
+  },
+  "keywords": ["mitre-saf", "mitre", "SAF"],
+  "author": "The MITRE SAF",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mitre/saf_action/issues"
+  },
+  "homepage": "https://github.com/mitre/saf_action#readme",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@mitre/saf": "^1.0.5"
+  }
+}

@@ -1,0 +1,57 @@
+{
+    "name": "@types/xml2js",
+    "version": "0.4.9",
+    "description": "TypeScript definitions for node-xml2js",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/xml2js",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Michel Salib",
+            "url": "https://github.com/michelsalib",
+            "githubUsername": "michelsalib"
+        },
+        {
+            "name": "Jason McNeil",
+            "url": "https://github.com/jasonrm",
+            "githubUsername": "jasonrm"
+        },
+        {
+            "name": "Christopher Currens",
+            "url": "https://github.com/ccurrens",
+            "githubUsername": "ccurrens"
+        },
+        {
+            "name": "Edward Hinkle",
+            "url": "https://github.com/edwardhinkle",
+            "githubUsername": "edwardhinkle"
+        },
+        {
+            "name": "Claas Ahlrichs",
+            "url": "https://github.com/claasahl",
+            "githubUsername": "claasahl"
+        },
+        {
+            "name": "Grzegorz Redlicki",
+            "url": "https://github.com/redlickigrzegorz",
+            "githubUsername": "redlickigrzegorz"
+        },
+        {
+            "name": "Ryan Ling",
+            "url": "https://github.com/72636c",
+            "githubUsername": "72636c"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/xml2js"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/node": "*"
+    },
+    "typesPublisherContentHash": "7b6614c448dd3c3451f1cc41da73ffbd63183e8394e13524d1c1d3c1cc588caf",
+    "typeScriptVersion": "3.6"
+}

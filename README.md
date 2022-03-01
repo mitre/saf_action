@@ -11,6 +11,7 @@ Example:
 
 * `convert:asff2hdf -i asff-findings.json -o output-file-name.json`
 * More examples can be found at [SAF CLI Usage](https://github.com/mitre/saf#usage)
+* NOTE: This action does not support `view:heimdall`.
 
 ### Output
 
@@ -19,10 +20,6 @@ As determined by input command.
 ## Secrets
 
 This action does not use any GitHub secrets at this time.
-
-## Environment Variables
-
-Internally, the action's entrypoint uses the environment variable passed via action input. GitHub converts inputs to environment variables by prefixing them with `INPUT_`. Example: `INPUT_COMMAND_STRING`.
 
 ## Example
 
@@ -38,7 +35,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Convert ASFF
-        uses: mitre/saf_action@v1.1.0
+        uses: mitre/saf_action@v1
         with:
           command_string: 'convert:asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
       - name: Artifacts
