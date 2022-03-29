@@ -19,6 +19,6 @@
   "homepage": "https://github.com/mitre/saf_action#readme",
   "dependencies": {
     "@actions/core": "^1.6.0",
-    "@mitre/saf": "^1.0.7"
+    "@mitre/saf": "^1.1.0"
   }
 }
