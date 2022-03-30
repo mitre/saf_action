@@ -1,0 +1,17 @@
+name: Run Test Scripts
+on:
+  push:
+    branches: main
+  pull_request:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo at pull request
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.ref }}
+    - name: Run Tests
+      run: 'npm test'
