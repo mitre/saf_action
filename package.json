@@ -13,7 +13,8 @@
   "keywords": [
     "mitre-saf",
     "mitre",
-    "SAF"
+    "SAF",
+    "actions"
   ],
   "author": "The MITRE SAF",
   "license": "Apache-2.0",
