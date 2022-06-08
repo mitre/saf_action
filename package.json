@@ -27,6 +27,6 @@
     "@mitre/saf": "^1.1.9"
   },
   "devDependencies": {
-    "jest": "^28.1.0"
+    "jest": "^28.1.1"
   }
 }
