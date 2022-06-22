@@ -11,7 +11,7 @@ Example:
 
 * `convert asff2hdf -i asff-findings.json -o output-file-name.json`
 * More examples can be found at [SAF CLI Usage](https://github.com/mitre/saf#usage)
-* NOTE: This action does not support `view heimdall`.
+* NOTE: This action does not support `view heimdall` or input file-type detection (i.e omission of the expected conversion type).
 
 ### Output
 
