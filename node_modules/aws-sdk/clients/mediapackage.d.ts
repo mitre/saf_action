@@ -203,12 +203,14 @@ declare namespace MediaPackage {
      * An optional 128-bit, 16-byte hex value represented by a 32-character string, used in conjunction with the key for encrypting blocks. If you don't specify a value, then MediaPackage creates the constant initialization vector (IV).
      */
     ConstantInitializationVector?: __string;
+    EncryptionMethod?: CmafEncryptionMethod;
     /**
      * Time (in seconds) between each encryption key rotation.
      */
     KeyRotationIntervalSeconds?: __integer;
     SpekeKeyProvider: SpekeKeyProvider;
   }
+  export type CmafEncryptionMethod = "SAMPLE_AES"|"AES_CTR"|string;
   export interface CmafPackage {
     Encryption?: CmafEncryption;
     /**
@@ -846,6 +848,8 @@ it will be passed through to HLS output.
      * The URL of the packaged OriginEndpoint for consumption.
      */
     Url?: __string;
+    AdTriggers?: AdTriggers;
+    AdsOnDeliveryRestrictions?: AdsOnDeliveryRestrictions;
   }
   export interface HlsManifestCreateOrUpdateParameters {
     /**
