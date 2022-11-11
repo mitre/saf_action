@@ -1,0 +1,33 @@
+name: Push @mitre/inspec-objects to NPM
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "16.x"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Remove testing resources
+        run: rm -rf test
+
+      - name: Build
+        run: npm run build
+
+      - name: Pack all items that are published as packages
+        run: npm pack
+
+      - name: Publish SAF CLI to NPM
+        run: npm publish --access public mitre-inspec-objects-*.tgz
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
