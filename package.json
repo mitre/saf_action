@@ -24,7 +24,7 @@
   "homepage": "https://github.com/mitre/saf_action#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "@mitre/saf": "^1.2.7"
+    "@mitre/saf": "^1.2.8"
   },
   "devDependencies": {
     "jest": "^28.1.2"

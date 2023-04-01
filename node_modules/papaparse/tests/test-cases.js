@@ -604,6 +604,15 @@ var CORE_PARSER_TESTS = [
 			errors: []
 		}
 	},
+	{
+		description: "Duplicate header names existing column",
+		input: 'c,c,c,c_1\n1,2,3,4',
+		config: { header: true },
+		expected: {
+			data: [['c', 'c_1', 'c_2', 'c_1_0'], ['1', '2', '3', '4']],
+			errors: []
+		}
+	},
 ];
 
 describe('Core Parser Tests', function() {
@@ -2647,7 +2656,24 @@ var CUSTOM_TESTS = [
 			var results = Papa.parse('"A","B","C","D"');
 			callback(results.meta.delimiter);
 		}
-	}
+	},
+	{
+		description: "Data is correctly parsed with chunks and duplicated headers",
+		expected: [{h0: 'a', h1: 'a'}, {h0: 'b', h1: 'b'}],
+		run: function(callback) {
+			var data = [];
+			Papa.parse('h0,h1\na,a\nb,b', {
+				header: true,
+				chunkSize: 10,
+				chunk: function(results) {
+					data.push(results.data[0]);
+				},
+				complete: function() {
+					callback(data);
+				}
+			});
+		}
+	},
 ];
 
 describe('Custom Tests', function() {
