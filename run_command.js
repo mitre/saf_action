@@ -1,3 +1,4 @@
+const {resolve} = require('path');
 const core = require('@actions/core');
 const saf = require('@mitre/saf');
 
@@ -18,11 +19,11 @@ async function runCommand(overrideCommand) {
 
     const command = saf_command[0].includes(':') ? saf_command[0].split(':')[1] : saf_command[1];
 
-    if (topic == "view" & command == "heimdall") {
+    if (topic == "view" && command == "heimdall") {
         throw new Error("The SAF Action does not support the 'view heimdall' command. Please reference the documentation for other uses.");
     }
 
-    return saf.run(saf_command);
+    return saf.run(saf_command, resolve("./node_modules/@mitre/saf/lib/index.js"));
 }
 
 module.exports = runCommand

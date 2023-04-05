@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout repo at pull request
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.ref }}
     - name: Create local changes - install dependencies
       run: npm ci
     - name: Commit & Push Changes
-      uses: actions-js/push@v1.3
+      uses: actions-js/push@v1.4
       with:
         github_token: ${{secrets.GITHUB_TOKEN}}
         branch: 'refs/heads/${{ github.event.pull_request.head.ref }}'
-    - uses: hmarr/auto-approve-action@v2
+    - uses: hmarr/auto-approve-action@v3
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
     - name: Enable auto-merge for Dependabot PRs
