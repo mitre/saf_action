@@ -7,7 +7,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
     - name: Test scan
       uses: mitre/saf_action@main
       with:
         command_string: 'scan'
+    - name: Test validate threshold with -T
+      uses: mitre/saf_action@main
+      with:
+        command_string: 'validate threshold -i ./test/sample_data/red_hat_good.json -T "{"error.total": 0, "compliance.min": 50}"'
