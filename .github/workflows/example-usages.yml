@@ -7,6 +7,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repo at pull request
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.ref }}
     - name: Test scan
       uses: mitre/saf_action@main
       with:
