@@ -2,7 +2,15 @@ const {resolve} = require('path');
 const core = require('@actions/core');
 const saf = require('@mitre/saf');
 
-async function runCommand(overrideCommand) {
+/**
+ * Runs the provided 'command string' against the SAF CLI
+ *
+ * @param {Object} [options]
+ * @param {string} [options.overrideCommand] - the command to run if one is not provided via environment variable
+ * @param {string} [options.safCLIPath] - the path to the entrypoint of the SAF CLI
+ * @return {Promise<unknown>} The result of running a command against an oclif cli tool
+ */
+async function runCommand({overrideCommand, safCLIPath}) {
     const command_string = core.getInput('command_string') || overrideCommand;
     if (!command_string) {
         throw new Error("SAF CLI Command String argument is required.");
@@ -23,7 +31,7 @@ async function runCommand(overrideCommand) {
         throw new Error("The SAF Action does not support the 'view heimdall' command. Please reference the documentation for other uses.");
     }
 
-    return saf.run(saf_command, resolve("./node_modules/@mitre/saf/lib/index.js"));
+    return saf.run(saf_command, resolve(safCLIPath));
 }
 
 module.exports = runCommand
