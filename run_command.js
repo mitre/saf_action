@@ -23,7 +23,7 @@ async function runCommand(overrideCommand) {
         throw new Error("The SAF Action does not support the 'view heimdall' command. Please reference the documentation for other uses.");
     }
 
-    return saf.run(saf_command, resolve("./node_modules/@mitre/saf/lib/index.js"));
+    return saf.run(saf_command);
 }
 
 module.exports = runCommand
