@@ -1,6 +1,7 @@
 const {resolve} = require('path');
 const core = require('@actions/core');
 const saf = require('@mitre/saf');
+const parse = require('shell-quote/parse');
 
 /**
  * Runs the provided 'command string' against the SAF CLI
@@ -16,7 +17,7 @@ async function runCommand({overrideCommand, safCLIPath}) {
         throw new Error("SAF CLI Command String argument is required.");
     }
 
-    const saf_command = command_string.split(' ');
+    const saf_command = parse(command_string);
 
     const allowable_topics = ['convert', 'generate', 'harden', 'scan', 'validate', 'view'];
     const topic = saf_command[0].includes(':') ? saf_command[0].split(':')[0] : saf_command[0];
