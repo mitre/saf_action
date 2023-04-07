@@ -7,7 +7,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo
+    - name: Checkout repo to have access to test data
       uses: actions/checkout@v3
     - name: Test scan
       uses: mitre/saf_action@main
