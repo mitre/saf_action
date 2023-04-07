@@ -46,6 +46,8 @@ jobs:
           path: asff_sample_hdf.json
 ```
 
+For more examples, check out [this workflow](https://github.com/mitre/saf_action/blob/main/.github/workflows/example-usages.yml).
+
 ## Contributing, Issues and Support
 
 ### Contributing
