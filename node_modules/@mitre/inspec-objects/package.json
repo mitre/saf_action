@@ -1,6 +1,6 @@
 {
   "name": "@mitre/inspec-objects",
-  "version": "0.0.34",
+  "version": "1.0.0",
   "description": "Typescript objects for normalizing between InSpec profiles and XCCDF benchmarks",
   "main": "lib/index.js",
   "publishConfig": {
