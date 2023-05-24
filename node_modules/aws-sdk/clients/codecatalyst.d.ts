@@ -12,19 +12,19 @@ declare class CodeCatalyst extends Service {
   constructor(options?: CodeCatalyst.Types.ClientConfiguration)
   config: Config & CodeCatalyst.Types.ClientConfiguration;
   /**
-   * Creates a personal access token (PAT) for the current user. A personal access token (PAT) is similar to a password. It is associated with your user account. You use PATs to access Amazon CodeCatalyst resources such as source repositories from third-party applications like Git and integrated development environments (IDEs). For more information, see Managing personal access tokens in Amazon CodeCatalyst.
+   * Creates a personal access token (PAT) for the current user. A personal access token (PAT) is similar to a password. It is associated with your user identity for use across all spaces and projects in Amazon CodeCatalyst. You use PATs to access CodeCatalyst from resources that include integrated development environments (IDEs) and Git-based source repositories. PATs represent you in Amazon CodeCatalyst and you can manage them in your user settings.For more information, see Managing personal access tokens in Amazon CodeCatalyst.
    */
   createAccessToken(params: CodeCatalyst.Types.CreateAccessTokenRequest, callback?: (err: AWSError, data: CodeCatalyst.Types.CreateAccessTokenResponse) => void): Request<CodeCatalyst.Types.CreateAccessTokenResponse, AWSError>;
   /**
-   * Creates a personal access token (PAT) for the current user. A personal access token (PAT) is similar to a password. It is associated with your user account. You use PATs to access Amazon CodeCatalyst resources such as source repositories from third-party applications like Git and integrated development environments (IDEs). For more information, see Managing personal access tokens in Amazon CodeCatalyst.
+   * Creates a personal access token (PAT) for the current user. A personal access token (PAT) is similar to a password. It is associated with your user identity for use across all spaces and projects in Amazon CodeCatalyst. You use PATs to access CodeCatalyst from resources that include integrated development environments (IDEs) and Git-based source repositories. PATs represent you in Amazon CodeCatalyst and you can manage them in your user settings.For more information, see Managing personal access tokens in Amazon CodeCatalyst.
    */
   createAccessToken(callback?: (err: AWSError, data: CodeCatalyst.Types.CreateAccessTokenResponse) => void): Request<CodeCatalyst.Types.CreateAccessTokenResponse, AWSError>;
   /**
-   * Creates a Dev Environment in Amazon CodeCatalyst, a cloud-based development Dev Environment that you can use to quickly work on the code stored in the source repositories of your project.   When created in the Amazon CodeCatalyst console, by default a Dev Environment is configured to have a 2 core processor, 4GB of RAM, and 16GB of persistent storage. None of these defaults apply to a Dev Environment created programmatically. 
+   * Creates a Dev Environment in Amazon CodeCatalyst, a cloud-based development environment that you can use to quickly work on the code stored in the source repositories of your project.   When created in the Amazon CodeCatalyst console, by default a Dev Environment is configured to have a 2 core processor, 4GB of RAM, and 16GB of persistent storage. None of these defaults apply to a Dev Environment created programmatically. 
    */
   createDevEnvironment(params: CodeCatalyst.Types.CreateDevEnvironmentRequest, callback?: (err: AWSError, data: CodeCatalyst.Types.CreateDevEnvironmentResponse) => void): Request<CodeCatalyst.Types.CreateDevEnvironmentResponse, AWSError>;
   /**
-   * Creates a Dev Environment in Amazon CodeCatalyst, a cloud-based development Dev Environment that you can use to quickly work on the code stored in the source repositories of your project.   When created in the Amazon CodeCatalyst console, by default a Dev Environment is configured to have a 2 core processor, 4GB of RAM, and 16GB of persistent storage. None of these defaults apply to a Dev Environment created programmatically. 
+   * Creates a Dev Environment in Amazon CodeCatalyst, a cloud-based development environment that you can use to quickly work on the code stored in the source repositories of your project.   When created in the Amazon CodeCatalyst console, by default a Dev Environment is configured to have a 2 core processor, 4GB of RAM, and 16GB of persistent storage. None of these defaults apply to a Dev Environment created programmatically. 
    */
   createDevEnvironment(callback?: (err: AWSError, data: CodeCatalyst.Types.CreateDevEnvironmentResponse) => void): Request<CodeCatalyst.Types.CreateDevEnvironmentResponse, AWSError>;
   /**
@@ -108,19 +108,27 @@ declare class CodeCatalyst extends Service {
    */
   getUserDetails(callback?: (err: AWSError, data: CodeCatalyst.Types.GetUserDetailsResponse) => void): Request<CodeCatalyst.Types.GetUserDetailsResponse, AWSError>;
   /**
-   * Lists all personal access tokens (PATs) associated with the user who calls the API. You can only list PATs associated with your user account.
+   * Lists all personal access tokens (PATs) associated with the user who calls the API. You can only list PATs associated with your Amazon Web Services Builder ID.
    */
   listAccessTokens(params: CodeCatalyst.Types.ListAccessTokensRequest, callback?: (err: AWSError, data: CodeCatalyst.Types.ListAccessTokensResponse) => void): Request<CodeCatalyst.Types.ListAccessTokensResponse, AWSError>;
   /**
-   * Lists all personal access tokens (PATs) associated with the user who calls the API. You can only list PATs associated with your user account.
+   * Lists all personal access tokens (PATs) associated with the user who calls the API. You can only list PATs associated with your Amazon Web Services Builder ID.
    */
   listAccessTokens(callback?: (err: AWSError, data: CodeCatalyst.Types.ListAccessTokensResponse) => void): Request<CodeCatalyst.Types.ListAccessTokensResponse, AWSError>;
   /**
-   * Retrives a list of Dev Environments in a project.
+   * Retrieves a list of active sessions for a Dev Environment in a project.
+   */
+  listDevEnvironmentSessions(params: CodeCatalyst.Types.ListDevEnvironmentSessionsRequest, callback?: (err: AWSError, data: CodeCatalyst.Types.ListDevEnvironmentSessionsResponse) => void): Request<CodeCatalyst.Types.ListDevEnvironmentSessionsResponse, AWSError>;
+  /**
+   * Retrieves a list of active sessions for a Dev Environment in a project.
+   */
+  listDevEnvironmentSessions(callback?: (err: AWSError, data: CodeCatalyst.Types.ListDevEnvironmentSessionsResponse) => void): Request<CodeCatalyst.Types.ListDevEnvironmentSessionsResponse, AWSError>;
+  /**
+   * Retrieves a list of Dev Environments in a project.
    */
   listDevEnvironments(params: CodeCatalyst.Types.ListDevEnvironmentsRequest, callback?: (err: AWSError, data: CodeCatalyst.Types.ListDevEnvironmentsResponse) => void): Request<CodeCatalyst.Types.ListDevEnvironmentsResponse, AWSError>;
   /**
-   * Retrives a list of Dev Environments in a project.
+   * Retrieves a list of Dev Environments in a project.
    */
   listDevEnvironments(callback?: (err: AWSError, data: CodeCatalyst.Types.ListDevEnvironmentsResponse) => void): Request<CodeCatalyst.Types.ListDevEnvironmentsResponse, AWSError>;
   /**
@@ -385,7 +393,7 @@ declare namespace CodeCatalyst {
   }
   export interface DeleteAccessTokenRequest {
     /**
-     * The ID of the personal access token to delete. You can find the IDs of all PATs associated with your user account by calling ListAccessTokens.
+     * The ID of the personal access token to delete. You can find the IDs of all PATs associated with your Amazon Web Services Builder ID in a space by calling ListAccessTokens.
      */
     id: AccessTokenId;
   }
@@ -450,7 +458,31 @@ declare namespace CodeCatalyst {
      */
     executeCommandSessionConfiguration?: ExecuteCommandSessionConfiguration;
   }
+  export interface DevEnvironmentSessionSummary {
+    /**
+     * The name of the space.
+     */
+    spaceName: NameString;
+    /**
+     * The name of the project in the space.
+     */
+    projectName: NameString;
+    /**
+     * The system-generated unique ID of the Dev Environment.
+     */
+    devEnvironmentId: Uuid;
+    /**
+     * The date and time the session started, in coordinated universal time (UTC) timestamp format as specified in RFC 3339 
+     */
+    startedTime: SyntheticTimestamp_date_time;
+    /**
+     * The system-generated unique ID of the Dev Environment session.
+     */
+    id: DevEnvironmentSessionSummaryIdString;
+  }
+  export type DevEnvironmentSessionSummaryIdString = string;
   export type DevEnvironmentSessionType = "SSM"|"SSH"|string;
+  export type DevEnvironmentSessionsSummaryList = DevEnvironmentSessionSummary[];
   export type DevEnvironmentStatus = "PENDING"|"RUNNING"|"STARTING"|"STOPPING"|"STOPPED"|"FAILED"|"DELETING"|"DELETED"|string;
   export interface DevEnvironmentSummary {
     /**
@@ -855,9 +887,43 @@ declare namespace CodeCatalyst {
   export type ListAccessTokensRequestNextTokenString = string;
   export interface ListAccessTokensResponse {
     /**
-     * A list of personal access tokens (PATs) associated with the calling user.
+     * A list of personal access tokens (PATs) associated with the calling user identity.
      */
     items: AccessTokenSummaries;
+    /**
+     * A token returned from a call to this API to indicate the next batch of results to return, if any.
+     */
+    nextToken?: String;
+  }
+  export interface ListDevEnvironmentSessionsRequest {
+    /**
+     * The name of the space.
+     */
+    spaceName: NameString;
+    /**
+     * The name of the project in the space.
+     */
+    projectName: NameString;
+    /**
+     * The system-generated unique ID of the Dev Environment.
+     */
+    devEnvironmentId: Uuid;
+    /**
+     * A token returned from a call to this API to indicate the next batch of results to return, if any.
+     */
+    nextToken?: ListDevEnvironmentSessionsRequestNextTokenString;
+    /**
+     * The maximum number of results to show in a single call to this API. If the number of results is larger than the number you specified, the response will include a NextToken element, which you can use to obtain additional results.
+     */
+    maxResults?: ListDevEnvironmentSessionsRequestMaxResultsInteger;
+  }
+  export type ListDevEnvironmentSessionsRequestMaxResultsInteger = number;
+  export type ListDevEnvironmentSessionsRequestNextTokenString = string;
+  export interface ListDevEnvironmentSessionsResponse {
+    /**
+     * Information about each session retrieved in the list.
+     */
+    items: DevEnvironmentSessionsSummaryList;
     /**
      * A token returned from a call to this API to indicate the next batch of results to return, if any.
      */
@@ -1084,7 +1150,7 @@ declare namespace CodeCatalyst {
      */
     nextToken?: String;
     /**
-     * Information about the space. 
+     * Information about the spaces. 
      */
     items?: SpaceSummaries;
   }

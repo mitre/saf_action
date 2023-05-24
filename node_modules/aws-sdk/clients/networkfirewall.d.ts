@@ -402,11 +402,11 @@ declare namespace NetworkFirewall {
      */
     Status?: AttachmentStatus;
     /**
-     * If Network Firewall fails to create or delete the firewall endpoint in the subnet, it populates this with the reason for the failure and how to resolve it. Depending on the error, it can take as many as 15 minutes to populate this field. For more information about the errors and solutions available for this field, see Troubleshooting firewall endpoint failures in the Network Firewall Developer Guide.
+     * If Network Firewall fails to create or delete the firewall endpoint in the subnet, it populates this with the reason for the error or failure and how to resolve it. A FAILED status indicates a non-recoverable state, and a ERROR status indicates an issue that you can fix. Depending on the error, it can take as many as 15 minutes to populate this field. For more information about the causes for failiure or errors and solutions available for this field, see Troubleshooting firewall endpoint failures in the Network Firewall Developer Guide.
      */
     StatusMessage?: StatusMessage;
   }
-  export type AttachmentStatus = "CREATING"|"DELETING"|"SCALING"|"READY"|string;
+  export type AttachmentStatus = "CREATING"|"DELETING"|"FAILED"|"ERROR"|"SCALING"|"READY"|string;
   export type AvailabilityZone = string;
   export type AzSubnet = string;
   export type AzSubnets = AzSubnet[];
@@ -1011,6 +1011,10 @@ declare namespace NetworkFirewall {
      * The Amazon Resource Name (ARN) of the TLS inspection configuration.
      */
     TLSInspectionConfigurationArn?: ResourceArn;
+    /**
+     * Contains variables that you can use to override default Suricata settings in your firewall policy.
+     */
+    PolicyVariables?: PolicyVariables;
   }
   export interface FirewallPolicyMetadata {
     /**
@@ -1331,6 +1335,12 @@ declare namespace NetworkFirewall {
   }
   export type PerObjectSyncStatus = "PENDING"|"IN_SYNC"|"CAPACITY_CONSTRAINED"|string;
   export type PolicyString = string;
+  export interface PolicyVariables {
+    /**
+     * The IPv4 or IPv6 addresses in CIDR notation to use for the Suricata HOME_NET variable. If your firewall uses an inspection VPC, you might want to override the HOME_NET variable with the CIDRs of your home networks. If you don't override HOME_NET with your own CIDRs, Network Firewall by default uses the CIDR of your inspection VPC.
+     */
+    RuleVariables?: IPSets;
+  }
   export type Port = string;
   export interface PortRange {
     /**
@@ -1366,7 +1376,7 @@ declare namespace NetworkFirewall {
      */
     ResourceArn: ResourceArn;
     /**
-     * The IAM policy statement that lists the accounts that you want to share your rule group or firewall policy with and the operations that you want the accounts to be able to perform.  For a rule group resource, you can specify the following operations in the Actions section of the statement:   network-firewall:CreateFirewallPolicy   network-firewall:UpdateFirewallPolicy   network-firewall:ListRuleGroups   For a firewall policy resource, you can specify the following operations in the Actions section of the statement:   network-firewall:CreateFirewall   network-firewall:UpdateFirewall   network-firewall:AssociateFirewallPolicy   network-firewall:ListFirewallPolicies   In the Resource section of the statement, you specify the ARNs for the rule groups and firewall policies that you want to share with the account that you specified in Arn.
+     * The IAM policy statement that lists the accounts that you want to share your rule group or firewall policy with and the operations that you want the accounts to be able to perform.  For a rule group resource, you can specify the following operations in the Actions section of the statement:   network-firewall:CreateFirewallPolicy   network-firewall:UpdateFirewallPolicy   network-firewall:ListRuleGroups   For a firewall policy resource, you can specify the following operations in the Actions section of the statement:   network-firewall:AssociateFirewallPolicy   network-firewall:ListFirewallPolicies   In the Resource section of the statement, you specify the ARNs for the rule groups and firewall policies that you want to share with the account that you specified in Arn.
      */
     Policy: PolicyString;
   }
@@ -1602,7 +1612,7 @@ declare namespace NetworkFirewall {
      */
     RuleOrder?: RuleOrder;
     /**
-     * Configures how Network Firewall processes traffic when a network connection breaks midstream. Network connections can break due to disruptions in external networks or within the firewall itself.    DROP - Network Firewall fails closed and drops all subsequent traffic going to the firewall. This is the default behavior.    CONTINUE - Network Firewall continues to apply rules to the subsequent traffic without context from traffic before the break. This impacts the behavior of rules that depend on this context. For example, if you have a stateful rule to drop http traffic, Network Firewall won't match the traffic for this rule because the service won't have the context from session initialization defining the application layer protocol as HTTP. However, this behavior is rule dependent—a TCP-layer rule using a flow:stateless rule would still match, as would the aws:drop_strict default action.  
+     * Configures how Network Firewall processes traffic when a network connection breaks midstream. Network connections can break due to disruptions in external networks or within the firewall itself.    DROP - Network Firewall fails closed and drops all subsequent traffic going to the firewall. This is the default behavior.    CONTINUE - Network Firewall continues to apply rules to the subsequent traffic without context from traffic before the break. This impacts the behavior of rules that depend on this context. For example, if you have a stateful rule to drop http traffic, Network Firewall won't match the traffic for this rule because the service won't have the context from session initialization defining the application layer protocol as HTTP. However, this behavior is rule dependent—a TCP-layer rule using a flow:stateless rule would still match, as would the aws:drop_strict default action.    REJECT - Network Firewall fails closed and drops all subsequent traffic going to the firewall. Network Firewall also sends a TCP reject packet back to your client so that the client can immediately establish a new session. Network Firewall will have context about the new session and will apply rules to the subsequent traffic.  
      */
     StreamExceptionPolicy?: StreamExceptionPolicy;
   }
@@ -1685,7 +1695,7 @@ declare namespace NetworkFirewall {
   }
   export type StatusMessage = string;
   export type StatusReason = string;
-  export type StreamExceptionPolicy = "DROP"|"CONTINUE"|string;
+  export type StreamExceptionPolicy = "DROP"|"CONTINUE"|"REJECT"|string;
   export interface SubnetMapping {
     /**
      * The unique identifier for the subnet. 
