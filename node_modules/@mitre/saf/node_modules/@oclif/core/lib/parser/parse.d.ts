@@ -1,0 +1,22 @@
+import { OutputArgs, OutputFlags, ParserInput, ParserOutput } from '../interfaces/parser';
+export declare class Parser<T extends ParserInput, TFlags extends OutputFlags<T['flags']>, BFlags extends OutputFlags<T['flags']>, TArgs extends OutputArgs<T['args']>> {
+    private readonly input;
+    private readonly argv;
+    private readonly booleanFlags;
+    private readonly context;
+    private currentFlag?;
+    private readonly flagAliases;
+    private readonly raw;
+    constructor(input: T);
+    parse(): Promise<ParserOutput<TFlags, BFlags, TArgs>>;
+    private _args;
+    private get _argTokens();
+    private _debugInput;
+    private _debugOutput;
+    private _flags;
+    private _setNames;
+    private findFlag;
+    private findLongFlag;
+    private findShortFlag;
+    private mapAndValidateFlags;
+}
