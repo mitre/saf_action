@@ -1,13 +1,13 @@
 name: Run Test Scripts
 on:
   push:
-    branches: main
+    branches: [ main ]
   pull_request:
 
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout repo at pull request
       uses: actions/checkout@v3
