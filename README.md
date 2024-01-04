@@ -19,7 +19,7 @@ As determined by input command.
 
 ## Secrets
 
-This action does not use any GitHub secrets at this time.
+This action does not use any GitHub secrets.
 
 ## Example
 
