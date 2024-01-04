@@ -1,6 +1,6 @@
 {
   "name": "saf_action",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "GitHub Action for the [SAF CLI](https://github.com/mitre/saf)",
   "main": "index.js",
   "scripts": {
