@@ -23,7 +23,7 @@ This action does not use any GitHub secrets.
 
 ## Example
 
-Below is an example action:
+Below is an example action.
 
 ```
 on: [push]
