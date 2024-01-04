@@ -12,7 +12,7 @@ jobs:
     - name: Checkout repo to have access to test data
       uses: actions/checkout@v4
     - name: Test convert data
-      uses: mitre/saf_action@main
+      uses: mitre/saf_action@v1
       with:
         command_string: 'convert burpsuite2hdf -i ./test/sample_data/burpsuite_sample.min -o burpsuite_hdf.json'
     - name: View summary of burpsuite results
