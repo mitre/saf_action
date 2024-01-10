@@ -15,7 +15,7 @@ Example:
 
 ### Output
 
-As determined by the input command.
+As determined by input command.
 
 ## Secrets
 
