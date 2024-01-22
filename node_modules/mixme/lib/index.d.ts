@@ -54,6 +54,10 @@ type MergeObjects<T extends object, U extends object> = {
 export function merge<T extends object[]>(...args: T): Merge<T>;
 export function mutate<T extends object[]>(...args: T): Merge<T>;
 
+export function snake_case_str(
+  source: string,
+): string;
+
 type SnakeCase<S extends string> = S extends `${infer T}${infer U}`
   ? `${T extends Uppercase<T> ? "_" : ""}${Lowercase<T>}${SnakeCase<U>}`
   : S;

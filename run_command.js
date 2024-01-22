@@ -2,6 +2,9 @@ const {resolve} = require('path');
 const core = require('@actions/core');
 const saf = require('@mitre/saf');
 const parse = require('shell-quote/parse');
+const SegFaultHandler = require('segfault-handler');
+
+SegFaultHandler.registerHandler('crash.log')
 
 /**
  * Runs the provided 'command string' against the SAF CLI
