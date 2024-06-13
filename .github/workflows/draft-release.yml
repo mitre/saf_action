@@ -16,7 +16,7 @@ jobs:
           echo "$(git tag -l --sort=taggerdate --format="%(contents:subject)" | tail -n 1)" > RELEASE_NOTES
           echo "This release corresponds to the latest of the same major version for the SAF CLI." >> RELEASE_NOTES
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: RELEASE_NOTES
           draft: true
