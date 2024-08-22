@@ -19,7 +19,7 @@ async function runCommand({overrideCommand, safCLIPath}) {
 
     const saf_command = parse(command_string);
 
-    const allowable_topics = ['convert', 'generate', 'harden', 'scan', 'validate', 'view'];
+    const allowable_topics = ['attest', 'convert', 'generate', 'harden', 'scan', 'validate', 'view'];
     const topic = saf_command[0].includes(':') ? saf_command[0].split(':')[0] : saf_command[0];
 
     if (!allowable_topics.includes(topic)) {
