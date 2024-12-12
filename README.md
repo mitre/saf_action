@@ -33,13 +33,13 @@ jobs:
     name: SAF CLI Convert ASFF to HDF
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Convert ASFF
         uses: mitre/saf_action@v1
         with:
           command_string: 'convert asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
       - name: Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           name: asff
