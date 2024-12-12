@@ -33,7 +33,7 @@ jobs:
     name: SAF CLI Convert ASFF to HDF
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
       - name: Convert ASFF
         uses: mitre/saf_action@v1
         with:
