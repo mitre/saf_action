@@ -1,6 +1,6 @@
 {
   "name": "saf_action",
-  "version": "1.7.9",
+  "version": "1.7.10",
   "description": "GitHub Action for the [SAF CLI](https://github.com/mitre/saf)",
   "main": "index.js",
   "scripts": {
@@ -23,9 +23,9 @@
   },
   "homepage": "https://github.com/mitre/saf_action#readme",
   "dependencies": {
-    "@actions/core": "^1.10.1",
-    "@mitre/saf": "^1.4.16",
-    "shell-quote": "^1.8.1"
+    "@actions/core": "^1.11.1",
+    "@mitre/saf": "^1.4.17",
+    "shell-quote": "^1.8.2"
   },
   "devDependencies": {
     "jest": "^29.7.0"
