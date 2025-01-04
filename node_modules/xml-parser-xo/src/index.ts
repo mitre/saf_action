@@ -129,7 +129,7 @@ function parseDocument(): XmlParserResult {
 }
 
 function processingInstruction(matchDeclaration: boolean): XmlParserNodeWrapper<XmlParserProcessingInstructionNode>|undefined {
-    const m = matchDeclaration ? match(/^<\?(xml)\s*/) : match(/^<\?([\w-:.]+)\s*/);
+    const m = matchDeclaration ? match(/^<\?(xml(-stylesheet)?)\s*/) : match(/^<\?([\w-:.]+)\s*/);
     if (!m) return;
 
     // tag
