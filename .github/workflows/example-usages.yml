@@ -22,11 +22,11 @@ jobs:
     - name: Test validate threshold with -T
       uses: mitre/saf_action@update-actions-to-v4
       with:
-        command_string: 'validate threshold -i ./test/sample_data/red_hat_good.json -T "{\\"error.total\\": 0, \\"compliance.min\\": 50}"'
+        command_string: 'validate threshold -i ./test/sample_data/red_hat_good.json -I "{\\"error.total\\": 0, \\"compliance.min\\": 50}"'
     - name: Test validate threshold with -T with a space in the path
       uses: mitre/saf_action@update-actions-to-v4
       with:
-        command_string: 'validate threshold -i ./test/sample_data/red_hat_good\ with_space.json -T "{\\"error.total\\": 0, \\"compliance.min\\": 50}"'
+        command_string: 'validate threshold -i ./test/sample_data/red_hat_good\ with_space.json -I "{\\"error.total\\": 0, \\"compliance.min\\": 50}"'
     - name: Artifacts
       uses: actions/upload-artifact@v4
       if: success()
