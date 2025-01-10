@@ -12,19 +12,19 @@ jobs:
     - name: Checkout repo to have access to test data
       uses: actions/checkout@v4
     - name: Test convert data
-      uses: mitre/saf_action@update-actions-to-v4
+      uses: mitre/saf_action@main
       with:
         command_string: 'convert burpsuite2hdf -i ./test/sample_data/burpsuite_sample.min -o burpsuite_hdf.json'
     - name: View summary of burpsuite results
-      uses: mitre/saf_action@update-actions-to-v4
+      uses: mitre/saf_action@main
       with:
         command_string: 'view summary -i burpsuite_hdf.json'
     - name: Test validate threshold with -T
-      uses: mitre/saf_action@update-actions-to-v4
+      uses: mitre/saf_action@main
       with:
         command_string: 'validate threshold -i ./test/sample_data/red_hat_good.json -I "{\\"error.total\\": 0, \\"compliance.min\\": 50}"'
     - name: Test validate threshold with -T with a space in the path
-      uses: mitre/saf_action@update-actions-to-v4
+      uses: mitre/saf_action@main
       with:
         command_string: 'validate threshold -i ./test/sample_data/red_hat_good\ with_space.json -I "{\\"error.total\\": 0, \\"compliance.min\\": 50}"'
     - name: Artifacts
