@@ -39,7 +39,7 @@ jobs:
         with:
           command_string: 'convert asff2hdf -i asff_sample.json -o asff_sample_hdf.json'
       - name: Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           name: asff
