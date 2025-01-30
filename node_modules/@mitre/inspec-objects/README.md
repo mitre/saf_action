@@ -49,17 +49,58 @@ Here are some formatting choices that are being made.
   <img src="images/Delta_Process.jpg" alt="Delta and Stub Generation Process" title="Delta and Stub Generation Process">
 </div>
 
-### NOTICE
+## Development Environment Configuration
+### Installation
+To install the project, clone the repository and install the dependencies:
+```bash
+# SSH
+git clone git@github.com:mitre/ts-inspec-objects.git 
+# HTTPS
+git clone https://github.com/mitre/ts-inspec-objects.git
 
-© 2018-2022 The MITRE Corporation.
+cd project
+npm install
+```
+
+### Compile the project
+Use the `build` script command to generate the executable libraries:
+```bash
+npm run build
+```
+
+### Linting the code
+Use either the `lint` or `lint:ci` command to invoke the linter:
+```bash
+# Auto fix
+npm run lint
+
+# Display linting findings
+npm run lint:ci
+```
+
+### Run the Test Suite
+Use the `test` script command to run all tests contained in the tests directory:
+
+```bash
+npm run test
+```
+
+### Run a Specific Test
+To run a specific test use the `npx jest --findRelatedTests` command:
+```bash
+npx jest --findRelatedTests <test\testName.ts>
+```
+## NOTICE
+
+© 2018-2025 The MITRE Corporation.
 
 Approved for Public Release; Distribution Unlimited. Case Number 18-3678.
 
-### NOTICE
+## NOTICE
 
 MITRE hereby grants express written permission to use, reproduce, distribute, modify, and otherwise leverage this software to the extent permitted by the licensed terms provided in the LICENSE.md file included with this project.
 
-### NOTICE
+## NOTICE
 
 This software was produced for the U. S. Government under Contract Number HHSM-500-2012-00008I, and is subject to Federal Acquisition Regulation Clause 52.227-14, Rights in Data-General.
 

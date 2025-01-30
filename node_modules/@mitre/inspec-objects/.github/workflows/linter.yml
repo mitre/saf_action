@@ -1,6 +1,4 @@
-
 name: Lint TS-InSpec-Objects
-
 on:
   push:
     branches: [ main ]
@@ -8,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Lint TS-InSpec-Objects
     runs-on: ubuntu-20.04
 
     steps:

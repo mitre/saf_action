@@ -1,5 +1,4 @@
 name: Run TS-InSpec-Objects E2E Tests
-
 on:
   push:
     branches: [ main ]
@@ -7,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Run TS-InSpec-Objects E2E Tests
     runs-on: ubuntu-20.04
 
     steps:

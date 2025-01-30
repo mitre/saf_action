@@ -1,6 +1,6 @@
 /* @license
 Papa Parse
-v5.4.1
+v5.5.2
 https://github.com/mholt/PapaParse
 License: MIT
 */
@@ -377,8 +377,10 @@ License: MIT
 				_escapedQuote = _config.escapeChar + _quoteChar;
 			}
 
-			if (typeof _config.escapeFormulae === 'boolean' || _config.escapeFormulae instanceof RegExp) {
-				_escapeFormulae = _config.escapeFormulae instanceof RegExp ? _config.escapeFormulae : /^[=+\-@\t\r].*$/;
+			if (_config.escapeFormulae instanceof RegExp) {
+				_escapeFormulae = _config.escapeFormulae;
+			} else if (typeof _config.escapeFormulae === 'boolean' && _config.escapeFormulae) {
+				_escapeFormulae =  /^[=+\-@\t\r].*$/;
 			}
 		}
 
@@ -484,6 +486,7 @@ License: MIT
 		}
 	}
 
+
 	/** ChunkStreamer is the base prototype for various streamer implementations. */
 	function ChunkStreamer(config)
 	{
@@ -508,6 +511,16 @@ License: MIT
 		this.parseChunk = function(chunk, isFakeChunk)
 		{
 			// First chunk pre-processing
+			const skipFirstNLines = parseInt(this._config.skipFirstNLines) || 0;
+			if (this.isFirstChunk && skipFirstNLines > 0) {
+				let _newline = this._config.newline;
+				if (!_newline) {
+					const quoteChar = this._config.quoteChar || '"';
+					_newline = this._handle.guessLineEndings(chunk, quoteChar);
+				}
+				const splitChunk = chunk.split(_newline);
+				chunk = [...splitChunk.slice(skipFirstNLines)].join(_newline);
+			}
 			if (this.isFirstChunk && isFunction(this._config.beforeFirstChunk))
 			{
 				var modifiedChunk = this._config.beforeFirstChunk(chunk);
@@ -520,7 +533,6 @@ License: MIT
 			// Rejoin the line we likely just split in two by chunking the file
 			var aggregate = this._partialLine + chunk;
 			this._partialLine = '';
-
 			var results = this._handle.parse(aggregate, this._baseIndex, !this._finished);
 
 			if (this._handle.paused() || this._handle.aborted()) {
@@ -1075,7 +1087,7 @@ License: MIT
 		{
 			var quoteChar = _config.quoteChar || '"';
 			if (!_config.newline)
-				_config.newline = guessLineEndings(input, quoteChar);
+				_config.newline = this.guessLineEndings(input, quoteChar);
 
 			_delimiterError = false;
 			if (!_config.delimiter)
@@ -1147,6 +1159,32 @@ License: MIT
 			if (isFunction(_config.complete))
 				_config.complete(_results);
 			_input = '';
+		};
+
+		this.guessLineEndings = function(input, quoteChar)
+		{
+			input = input.substring(0, 1024 * 1024);	// max length 1 MB
+			// Replace all the text inside quotes
+			var re = new RegExp(escapeRegExp(quoteChar) + '([^]*?)' + escapeRegExp(quoteChar), 'gm');
+			input = input.replace(re, '');
+
+			var r = input.split('\r');
+
+			var n = input.split('\n');
+
+			var nAppearsFirst = (n.length > 1 && n[0].length < r[0].length);
+
+			if (r.length === 1 || nAppearsFirst)
+				return '\n';
+
+			var numWithN = 0;
+			for (var i = 0; i < r.length; i++)
+			{
+				if (r[i][0] === '\n')
+					numWithN++;
+			}
+
+			return numWithN >= r.length / 2 ? '\r\n' : '\r';
 		};
 
 		function testEmptyLine(s) {
@@ -1355,32 +1393,6 @@ License: MIT
 			};
 		}
 
-		function guessLineEndings(input, quoteChar)
-		{
-			input = input.substring(0, 1024 * 1024);	// max length 1 MB
-			// Replace all the text inside quotes
-			var re = new RegExp(escapeRegExp(quoteChar) + '([^]*?)' + escapeRegExp(quoteChar), 'gm');
-			input = input.replace(re, '');
-
-			var r = input.split('\r');
-
-			var n = input.split('\n');
-
-			var nAppearsFirst = (n.length > 1 && n[0].length < r[0].length);
-
-			if (r.length === 1 || nAppearsFirst)
-				return '\n';
-
-			var numWithN = 0;
-			for (var i = 0; i < r.length; i++)
-			{
-				if (r[i][0] === '\n')
-					numWithN++;
-			}
-
-			return numWithN >= r.length / 2 ? '\r\n' : '\r';
-		}
-
 		function addError(type, code, msg, row)
 		{
 			var error = {
@@ -1413,6 +1425,9 @@ License: MIT
 		var preview = config.preview;
 		var fastMode = config.fastMode;
 		var quoteChar;
+		var renamedHeaders = null;
+		var headerParsed = false;
+
 		if (config.quoteChar === undefined || config.quoteChar === null) {
 			quoteChar = '"';
 		} else {
@@ -1466,40 +1481,6 @@ License: MIT
 			if (!input)
 				return returnable();
 
-			// Rename headers if there are duplicates
-			if (config.header && !baseIndex)
-			{
-				var firstLine = input.split(newline)[0];
-				var headers = firstLine.split(delim);
-				var separator = '_';
-				var headerMap = [];
-				var headerCount = {};
-				var duplicateHeaders = false;
-
-				for (var j in headers) {
-					var header = headers[j];
-					if (isFunction(config.transformHeader))
-						header = config.transformHeader(header, j);
-					var headerName = header;
-
-					var count = headerCount[header] || 0;
-					if (count > 0) {
-						duplicateHeaders = true;
-						headerName = header + separator + count;
-					}
-					headerCount[header] = count + 1;
-					// In case it already exists, we add more separtors
-					while (headerMap.includes(headerName)) {
-						headerName = headerName + separator + count;
-					}
-					headerMap.push(headerName);
-				}
-				if (duplicateHeaders) {
-					var editedInput = input.split(newline);
-					editedInput[0] = headerMap.join(delim);
-					input = editedInput.join(newline);
-				}
-			}
 			if (fastMode || (fastMode !== false && input.indexOf(quoteChar) === -1))
 			{
 				var rows = input.split(newline);
@@ -1507,6 +1488,7 @@ License: MIT
 				{
 					row = rows[i];
 					cursor += row.length;
+
 					if (i !== rows.length - 1)
 						cursor += newline.length;
 					else if (ignoreLastRow)
@@ -1701,7 +1683,6 @@ License: MIT
 				break;
 			}
 
-
 			return finish();
 
 
@@ -1761,6 +1742,48 @@ License: MIT
 			/** Returns an object with the results, errors, and meta. */
 			function returnable(stopped)
 			{
+				if (config.header && !baseIndex && data.length && !headerParsed)
+				{
+					const result = data[0];
+					const headerCount = {}; // To track the count of each base header
+					const usedHeaders = new Set(result); // To track used headers and avoid duplicates
+					let duplicateHeaders = false;
+
+					for (let i = 0; i < result.length; i++) {
+						let header = result[i];
+						if (isFunction(config.transformHeader))
+							header = config.transformHeader(header, i);
+
+						if (!headerCount[header]) {
+							headerCount[header] = 1;
+							result[i] = header;
+						} else {
+							let newHeader;
+							let suffixCount = headerCount[header];
+
+							// Find a unique new header
+							do {
+								newHeader = `${header}_${suffixCount}`;
+								suffixCount++;
+							} while (usedHeaders.has(newHeader));
+
+							usedHeaders.add(newHeader); // Mark this new Header as used
+							result[i] = newHeader;
+							headerCount[header]++;
+							duplicateHeaders = true;
+							if (renamedHeaders === null) {
+								renamedHeaders = {};
+							}
+							renamedHeaders[newHeader] = header;
+						}
+
+						usedHeaders.add(header); // Ensure the original header is marked as used
+					}
+					if (duplicateHeaders) {
+						console.warn('Duplicate headers found and renamed.');
+					}
+					headerParsed = true;
+				}
 				return {
 					data: data,
 					errors: errors,
@@ -1769,7 +1792,8 @@ License: MIT
 						linebreak: newline,
 						aborted: aborted,
 						truncated: !!stopped,
-						cursor: lastCursor + (baseIndex || 0)
+						cursor: lastCursor + (baseIndex || 0),
+						renamedHeaders: renamedHeaders
 					}
 				};
 			}
@@ -1912,7 +1936,6 @@ License: MIT
 	{
 		return function() { f.apply(self, arguments); };
 	}
-
 	function isFunction(func)
 	{
 		return typeof func === 'function';
