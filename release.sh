@@ -55,13 +55,18 @@ echo "New SAF Action version: $new_version"
 # Step 3: Update package.json file and node modules
 echo "Step 3: Update package.json file and node modules."
 rm -rf node_modules/*
-jq ".version = \"$new_version\" | .dependencies[\"@mitre/saf\"] = \"$saf_cli_version\"" package.json > package.tmp.json && mv package.tmp.json package.json
+jq ".version = \"$new_version\" | .dependencies[\"@mitre/saf\"] = \"^$saf_cli_version\"" package.json > package.tmp.json && mv package.tmp.json package.json
 npm install
 
 git add .
 git commit -s -m "Updated node modules to use new SAF CLI version and updated SAF Action version number"
 
+# Run the SAF CLI local tests to make sure the new version is working
+# echo "Running SAF CLI local tests to make sure the new version is working."
+# npm run test
+
 # Step 4: Update SAF Action version based on the criteria
+# If you have issues with this step, try manually running git push for each tag.
 echo "Step 4: Update SAF Action version based on the criteria."
 git tag -a -m "Using SAF CLI version $saf_cli_version" "v$new_version"
 git tag -f -a -m "Using SAF CLI version $saf_cli_version" "v${cli_version_parts[0]}"
