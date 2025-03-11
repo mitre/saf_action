@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script was generated using AI based on the written documentation for the release instructions.
+
 # Function to check if a command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -20,6 +22,7 @@ if [ "$cloned_before" == "no" ]; then
     echo "Enter the repository URL:"
     read repo_url
     git clone "$repo_url"
+    cd saf_action
 else
     git pull
 fi
@@ -66,19 +69,22 @@ git commit -s -m "Updated node modules to use new SAF CLI version and updated SA
 # npm run test
 
 # Step 4: Update SAF Action version based on the criteria
-# If you have issues with this step, try manually running git push for each tag.
 echo "Step 4: Update SAF Action version based on the criteria."
 git tag -a -m "Using SAF CLI version $saf_cli_version" "v$new_version"
 git tag -f -a -m "Using SAF CLI version $saf_cli_version" "v${cli_version_parts[0]}"
 git push --atomic origin main "v$new_version" "v${cli_version_parts[0]}"
+# If you have issues with this step, try manually running git push for the commit and each tag.
+# git push 
+# git push origin main v$new_version
+# git push origin main v${cli_version_parts[0]}
 
 # Step 5: Check that the updated SAF Action is working
 echo "Step 5: Check that the updated SAF Action is working."
-echo "Please check the unit test results and integration test results on GitHub Actions."
+echo "Please check the unit test results and integration test results on GitHub Actions at https://github.com/mitre/saf_action/actions."
 
 # Step 6: Release the newly tagged version
 echo "Step 6: Release the newly tagged version."
 echo "Wait for the draft-release workflow to complete."
-echo "Visit the GitHub releases page to publish the release."
+echo "Visit the GitHub releases page to publish the release here: https://github.com/mitre/saf_action/releases"
 
 echo "Release process completed."
