@@ -72,11 +72,12 @@ git commit -s -m "Updated node modules to use new SAF CLI version and updated SA
 echo "Step 4: Update SAF Action version based on the criteria."
 git tag -a -m "Using SAF CLI version $saf_cli_version" "v$new_version"
 git tag -f -a -m "Using SAF CLI version $saf_cli_version" "v${cli_version_parts[0]}"
-git push --atomic origin main "v$new_version" "v${cli_version_parts[0]}"
 # If you have issues with this step, try manually running git push for the commit and each tag.
-# git push 
-# git push origin main v$new_version
-# git push origin main v${cli_version_parts[0]}
+# This line is supposed to push the commit and both tags in one command, but it may not work because of the previous major version tag.
+# git push --atomic origin main "v$new_version" "v${cli_version_parts[0]}"
+git push 
+git push origin main v$new_version
+git push -f origin main v${cli_version_parts[0]}
 
 # Step 5: Check that the updated SAF Action is working
 echo "Step 5: Check that the updated SAF Action is working."
