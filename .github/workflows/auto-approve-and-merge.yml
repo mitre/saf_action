@@ -24,8 +24,6 @@ jobs:
         github_token: ${{secrets.GITHUB_TOKEN}}
         branch: 'refs/heads/${{ github.event.pull_request.head.ref }}'
     - uses: hmarr/auto-approve-action@v4
-      with:
-        github-token: "${{ secrets.GITHUB_TOKEN }}"
     - name: Enable auto-merge for Dependabot PRs
       run: gh pr merge --auto --merge "$PR_URL"
       env:
