@@ -41,8 +41,8 @@ const gatherDepSet = require('./gather-dep-set.js')
 const treeCheck = require('./tree-check.js')
 const { walkUp } = require('walk-up-path')
 
-const { resolve, relative, dirname, basename } = require('path')
-const util = require('util')
+const { resolve, relative, dirname, basename } = require('node:path')
+const util = require('node:util')
 const _package = Symbol('_package')
 const _parent = Symbol('_parent')
 const _target = Symbol.for('_target')
@@ -842,7 +842,7 @@ class Node {
     }
 
     for (const [name, path] of this.#workspaces.entries()) {
-      new Edge({ from: this, name, spec: `file:${path.replace(/#/g, '%23')}`, type: 'workspace' })
+      new Edge({ from: this, name, spec: `file:${path}`, type: 'workspace' })
     }
   }
 

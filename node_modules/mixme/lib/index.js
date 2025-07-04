@@ -49,7 +49,7 @@ export function snake_case(source, convert = true) {
     for (let name of Object.keys(source)) {
       let src = source[name];
       if (convert) {
-        name = _snake_case(name);
+        name = snake_case_str(name);
       }
       target[name] = snake_case(src, u);
     }
@@ -96,10 +96,11 @@ export function compare(el1, el2) {
   return true;
 }
 
-function _snake_case(str) {
-  return str.replace(/([A-Z])/g, (_, match) => {
-    return "_" + match.toLowerCase();
-  });
+export function snake_case_str(str) {
+  return str
+    .replace(/([a-z\d])([A-Z]+)/g, "$1_$2")
+    .replace(/[-\s]+/g, "_")
+    .toLowerCase();
 }
 
 export function is_object(obj) {
