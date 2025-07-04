@@ -25,7 +25,7 @@ export type XmlParserAttribute = {
     value: string;
 }
 
-export type XmlParserElementChildNode = XmlParserTextNode|XmlParserElementNode|XmlParserCDATANode|XmlParserCommentNode;
+export type XmlParserElementChildNode = XmlParserTextNode|XmlParserElementNode|XmlParserCDATANode|XmlParserCommentNode|XmlParserProcessingInstructionNode;
 export type XmlParserDocumentChildNode = XmlParserDocumentTypeNode|XmlParserProcessingInstructionNode|XmlParserElementChildNode;
 
 export type XmlParserProcessingInstructionNode = {
@@ -84,7 +84,7 @@ let parsingState: {
 };
 
 function nextChild() {
-    return element(false) || text() || comment() || cdata();
+    return element(false) || text() || comment() || cdata() || processingInstruction(false);
 }
 
 function nextRootChild() {

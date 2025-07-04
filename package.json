@@ -4,7 +4,7 @@
   "description": "GitHub Action for the [SAF CLI](https://github.com/mitre/saf)",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "shell-quote": "^1.8.2"
   },
   "devDependencies": {
-    "jest": "^29.7.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.44.1",
+    "vitest": "^3.2.4"
   }
 }

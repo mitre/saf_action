@@ -1,3 +1,4 @@
+import { describe, it } from 'vitest';
 const path = require('path');
 const saf_action =  require('../run_command.js');
 

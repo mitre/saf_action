@@ -46,7 +46,12 @@ class Publish extends BaseCommand {
     await this.#publish(args)
   }
 
-  async execWorkspaces () {
+  async execWorkspaces (args) {
+    const useWorkspaces = args.length === 0 || args.includes('.')
+    if (!useWorkspaces) {
+      log.warn('Ignoring workspaces for specified package(s)')
+      return this.exec(args)
+    }
     await this.setWorkspaces()
 
     for (const [name, workspace] of this.workspaces.entries()) {
@@ -126,6 +131,15 @@ class Publish extends BaseCommand {
     const creds = this.npm.config.getCredentialsByURI(registry)
     const noCreds = !(creds.token || creds.username || creds.certfile && creds.keyfile)
     const outputRegistry = replaceInfo(registry)
+
+    // if a workspace package is marked private then we skip it
+    if (workspace && manifest.private) {
+      throw Object.assign(
+        new Error(`This package has been marked as private
+  Remove the 'private' field from the package.json to publish it.`),
+        { code: 'EPRIVATE' }
+      )
+    }
 
     if (noCreds) {
       const msg = `This command requires you to be logged in to ${outputRegistry}`
