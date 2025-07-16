@@ -1,0 +1,30 @@
+name: Build and Pack TS-InSpec-Objects
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    name: Build and Pack TS-InSpec-Objects
+    runs-on: ubuntu-24.04
+
+    steps:
+     - uses: actions/checkout@v4
+
+     - name: Setup Node.js
+       uses: actions/setup-node@v4
+       with:
+        node-version: 22
+        cache: 'npm'
+
+     - name: Prep
+       run: |
+         npm ci
+         rm -rf test
+
+     - name: Build
+       run: npm run build
+
+     - name: Pack
+       run: npm pack
