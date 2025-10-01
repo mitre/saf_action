@@ -1,0 +1,78 @@
+id:
+name: GitOps.PullRequestIssueManagement
+description: GitOps.PullRequestIssueManagement primitive
+owner:
+resource: repository
+disabled: false
+where:
+configuration:
+  resourceManagementConfiguration:
+    scheduledSearches: []
+    eventResponderTasks:
+    - if:
+      - payloadType: Issues
+      - isAction:
+          action: Closed
+      - hasLabel:
+          label: 'status:waiting-for-author-feedback'
+      then:
+      - removeLabel:
+          label: 'status:waiting-for-author-feedback'
+      description:
+    - if:
+      - payloadType: Issue_Comment
+      - isAction:
+          action: Created
+      - isActivitySender:
+          issueAuthor: True
+      - hasLabel:
+          label: 'status:waiting-for-author-feedback'
+      then:
+      - addLabel:
+          label: 'Needs: Attention :wave:'
+      - removeLabel:
+          label: 'status:waiting-for-author-feedback'
+      description:
+    - if:
+      - payloadType: Issues
+      - not:
+          isAction:
+            action: Closed
+      - hasLabel:
+          label: no-recent-activity
+      then:
+      - removeLabel:
+          label: no-recent-activity
+      description:
+    - if:
+      - payloadType: Issues
+      - labelAdded:
+          label: service bug
+      then: []
+      description:
+    - if:
+      - payloadType: Issue_Comment
+      - activitySenderHasAssociation:
+          association: Contributor
+      - bodyContains:
+          pattern: '?'
+          isRegex: False
+      - bodyContains:
+          pattern: '@'
+          isRegex: False
+      then:
+      - addLabel:
+          label: 'status:waiting-for-author-feedback'
+      description:
+    - if:
+      - payloadType: Issues
+      - or:
+        - isAssignedToSomeone
+        - isAction:
+            action: Closed
+      then:
+      - removeLabel:
+          label: ToTriage
+      description:
+onFailure:
+onSuccess:

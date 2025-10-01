@@ -1,0 +1,79 @@
+{
+  "name": "object-treeify",
+  "type": "module",
+  "version": "4.0.1",
+  "description": "Stringify Object as tree structure",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "cp -rf ./src ./lib && ncc build -m -o lib && mv lib/index.js lib/index.min.js && cp src/index.js lib/index.js && rm lib/package.json",
+    "build-clean": "yarn run clean && yarn run build",
+    "test-simple": "c8 mocha --experimental-loader=./test/hot.js \"./test/**/*.spec.js\"",
+    "test": "yarn run clean && yarn run gardener && yarn run test-simple",
+    "semantic-release": "yarn run build-clean && npx semantic-release",
+    "gardener": "node gardener.js",
+    "docker": "docker run --net host -u`id -u`:`id -g` -v $(pwd):/user/project -v ~/.aws:/user/.aws -v ~/.npmrc:/user/.npmrc -w /user/project -it --entrypoint /bin/bash",
+    "t": "yarn test",
+    "ts": "yarn run test-simple",
+    "tsv": "yarn run test-simple --verbose",
+    "u": "yarn upgrade --latest --force",
+    "i": "yarn install --frozen-lockfile",
+    "it": "yarn run i && yarn run t",
+    "ncc-analyze": "yarn clean && cp -rf ./src ./lib && ncc build -m -s -o lib && npx source-map-explorer lib/index.js --only-mapped --html source.html && yarn clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blackflux/object-treeify.git"
+  },
+  "keywords": [
+    "object",
+    "tree",
+    "print",
+    "console",
+    "pretty",
+    "treeify",
+    "stringify",
+    "visualize",
+    "convert",
+    "string",
+    "debug"
+  ],
+  "author": "Lukas Siemon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blackflux/object-treeify/issues"
+  },
+  "homepage": "https://github.com/blackflux/object-treeify#readme",
+  "devDependencies": {
+    "@babel/core": "7.22.9",
+    "@babel/eslint-parser": "7.22.9",
+    "@babel/register": "7.22.5",
+    "@blackflux/eslint-plugin-rules": "3.0.0",
+    "@blackflux/robo-config-plugin": "9.1.9",
+    "@vercel/ncc": "0.36.1",
+    "c8": "8.0.1",
+    "chai": "4.3.7",
+    "eslint": "8.46.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.28.0",
+    "eslint-plugin-json": "3.1.0",
+    "eslint-plugin-markdown": "3.0.1",
+    "eslint-plugin-mocha": "10.1.0",
+    "js-gardener": "5.0.1",
+    "smart-fs": "4.0.0",
+    "treeify": "1.1.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/blackflux/object-treeify/blob/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">= 16"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {}
+}
