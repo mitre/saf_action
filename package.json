@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/mitre/saf_action#readme",
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.0",
     "@mitre/saf": "^1.5.1",
     "shell-quote": "^1.8.2"
   },
