@@ -7,10 +7,10 @@ on:
 
 jobs:
   test:
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
     - name: Checkout repo to have access to test data
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Test convert data
       uses: mitre/saf_action@main
       with:
