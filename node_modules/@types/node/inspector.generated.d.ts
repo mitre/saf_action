@@ -3,12 +3,11 @@
 // See scripts/generate-inspector/README.md for information on how to update the protocol definitions.
 // Changes to the module itself should be added to the generator template (scripts/generate-inspector/inspector.d.ts.template).
 
-declare module "inspector" {
+declare module "node:inspector" {
     interface InspectorNotification<T> {
         method: string;
         params: T;
     }
-
     namespace Schema {
         /**
          * Description of the protocol domain.
@@ -1774,6 +1773,23 @@ declare module "inspector" {
             success: boolean;
             stream?: IO.StreamHandle | undefined;
         }
+        /**
+         * WebSocket response data.
+         */
+        interface WebSocketResponse {
+            /**
+             * HTTP response status code.
+             */
+            status: number;
+            /**
+             * HTTP response status text.
+             */
+            statusText: string;
+            /**
+             * HTTP response headers.
+             */
+            headers: Headers;
+        }
         interface GetRequestPostDataParameterType {
             /**
              * Identifier of the network request to get content for.
@@ -1914,6 +1930,44 @@ declare module "inspector" {
              */
             data?: string | undefined;
         }
+        interface WebSocketCreatedEventDataType {
+            /**
+             * Request identifier.
+             */
+            requestId: RequestId;
+            /**
+             * WebSocket request URL.
+             */
+            url: string;
+            /**
+             * Request initiator.
+             */
+            initiator: Initiator;
+        }
+        interface WebSocketClosedEventDataType {
+            /**
+             * Request identifier.
+             */
+            requestId: RequestId;
+            /**
+             * Timestamp.
+             */
+            timestamp: MonotonicTime;
+        }
+        interface WebSocketHandshakeResponseReceivedEventDataType {
+            /**
+             * Request identifier.
+             */
+            requestId: RequestId;
+            /**
+             * Timestamp.
+             */
+            timestamp: MonotonicTime;
+            /**
+             * WebSocket response data.
+             */
+            response: WebSocketResponse;
+        }
     }
     namespace NodeRuntime {
         interface NotifyWhenWaitingForDisconnectParameterType {
@@ -1978,7 +2032,6 @@ declare module "inspector" {
             eof: boolean;
         }
     }
-
     interface Session {
         /**
          * Posts a message to the inspector back-end. `callback` will be notified when
@@ -2373,7 +2426,6 @@ declare module "inspector" {
         post(method: "IO.read", callback?: (err: Error | null, params: IO.ReadReturnType) => void): void;
         post(method: "IO.close", params?: IO.CloseParameterType, callback?: (err: Error | null) => void): void;
         post(method: "IO.close", callback?: (err: Error | null) => void): void;
-
         addListener(event: string, listener: (...args: any[]) => void): this;
         /**
          * Emitted when any notification from the V8 Inspector is received.
@@ -2484,6 +2536,18 @@ declare module "inspector" {
          */
         addListener(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
         /**
+         * Fired upon WebSocket creation.
+         */
+        addListener(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        addListener(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        addListener(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
+        /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
          * It is fired when the Node process finished all code execution and is
@@ -2529,6 +2593,9 @@ declare module "inspector" {
         emit(event: "Network.loadingFailed", message: InspectorNotification<Network.LoadingFailedEventDataType>): boolean;
         emit(event: "Network.loadingFinished", message: InspectorNotification<Network.LoadingFinishedEventDataType>): boolean;
         emit(event: "Network.dataReceived", message: InspectorNotification<Network.DataReceivedEventDataType>): boolean;
+        emit(event: "Network.webSocketCreated", message: InspectorNotification<Network.WebSocketCreatedEventDataType>): boolean;
+        emit(event: "Network.webSocketClosed", message: InspectorNotification<Network.WebSocketClosedEventDataType>): boolean;
+        emit(event: "Network.webSocketHandshakeResponseReceived", message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>): boolean;
         emit(event: "NodeRuntime.waitingForDisconnect"): boolean;
         emit(event: "NodeRuntime.waitingForDebugger"): boolean;
         emit(event: "Target.targetCreated", message: InspectorNotification<Target.TargetCreatedEventDataType>): boolean;
@@ -2642,6 +2709,18 @@ declare module "inspector" {
          * Fired when data chunk was received over the network.
          */
         on(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
+        /**
+         * Fired upon WebSocket creation.
+         */
+        on(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        on(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        on(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
         /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
@@ -2766,6 +2845,18 @@ declare module "inspector" {
          */
         once(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
         /**
+         * Fired upon WebSocket creation.
+         */
+        once(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        once(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        once(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
+        /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
          * It is fired when the Node process finished all code execution and is
@@ -2888,6 +2979,18 @@ declare module "inspector" {
          * Fired when data chunk was received over the network.
          */
         prependListener(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
+        /**
+         * Fired upon WebSocket creation.
+         */
+        prependListener(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        prependListener(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        prependListener(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
         /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
@@ -3012,6 +3115,18 @@ declare module "inspector" {
          */
         prependOnceListener(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
         /**
+         * Fired upon WebSocket creation.
+         */
+        prependOnceListener(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        prependOnceListener(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        prependOnceListener(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
+        /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
          * It is fired when the Node process finished all code execution and is
@@ -3027,8 +3142,7 @@ declare module "inspector" {
         prependOnceListener(event: "Target.attachedToTarget", listener: (message: InspectorNotification<Target.AttachedToTargetEventDataType>) => void): this;
     }
 }
-
-declare module "inspector/promises" {
+declare module "node:inspector/promises" {
     export {
         Schema,
         Runtime,
@@ -3044,8 +3158,7 @@ declare module "inspector/promises" {
         IO,
     } from 'inspector';
 }
-
-declare module "inspector/promises" {
+declare module "node:inspector/promises" {
     import {
         InspectorNotification,
         Schema,
@@ -3061,7 +3174,6 @@ declare module "inspector/promises" {
         Target,
         IO,
     } from "inspector";
-
     /**
      * The `inspector.Session` is used for dispatching messages to the V8 inspector
      * back-end and receiving message responses and notifications.
@@ -3396,7 +3508,6 @@ declare module "inspector/promises" {
          */
         post(method: "IO.read", params?: IO.ReadParameterType): Promise<IO.ReadReturnType>;
         post(method: "IO.close", params?: IO.CloseParameterType): Promise<void>;
-
         addListener(event: string, listener: (...args: any[]) => void): this;
         /**
          * Emitted when any notification from the V8 Inspector is received.
@@ -3507,6 +3618,18 @@ declare module "inspector/promises" {
          */
         addListener(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
         /**
+         * Fired upon WebSocket creation.
+         */
+        addListener(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        addListener(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        addListener(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
+        /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
          * It is fired when the Node process finished all code execution and is
@@ -3552,6 +3675,9 @@ declare module "inspector/promises" {
         emit(event: "Network.loadingFailed", message: InspectorNotification<Network.LoadingFailedEventDataType>): boolean;
         emit(event: "Network.loadingFinished", message: InspectorNotification<Network.LoadingFinishedEventDataType>): boolean;
         emit(event: "Network.dataReceived", message: InspectorNotification<Network.DataReceivedEventDataType>): boolean;
+        emit(event: "Network.webSocketCreated", message: InspectorNotification<Network.WebSocketCreatedEventDataType>): boolean;
+        emit(event: "Network.webSocketClosed", message: InspectorNotification<Network.WebSocketClosedEventDataType>): boolean;
+        emit(event: "Network.webSocketHandshakeResponseReceived", message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>): boolean;
         emit(event: "NodeRuntime.waitingForDisconnect"): boolean;
         emit(event: "NodeRuntime.waitingForDebugger"): boolean;
         emit(event: "Target.targetCreated", message: InspectorNotification<Target.TargetCreatedEventDataType>): boolean;
@@ -3665,6 +3791,18 @@ declare module "inspector/promises" {
          * Fired when data chunk was received over the network.
          */
         on(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
+        /**
+         * Fired upon WebSocket creation.
+         */
+        on(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        on(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        on(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
         /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
@@ -3789,6 +3927,18 @@ declare module "inspector/promises" {
          */
         once(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
         /**
+         * Fired upon WebSocket creation.
+         */
+        once(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        once(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        once(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
+        /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
          * It is fired when the Node process finished all code execution and is
@@ -3912,6 +4062,18 @@ declare module "inspector/promises" {
          */
         prependListener(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
         /**
+         * Fired upon WebSocket creation.
+         */
+        prependListener(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        prependListener(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        prependListener(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
+        /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
          * It is fired when the Node process finished all code execution and is
@@ -4034,6 +4196,18 @@ declare module "inspector/promises" {
          * Fired when data chunk was received over the network.
          */
         prependOnceListener(event: "Network.dataReceived", listener: (message: InspectorNotification<Network.DataReceivedEventDataType>) => void): this;
+        /**
+         * Fired upon WebSocket creation.
+         */
+        prependOnceListener(event: "Network.webSocketCreated", listener: (message: InspectorNotification<Network.WebSocketCreatedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket is closed.
+         */
+        prependOnceListener(event: "Network.webSocketClosed", listener: (message: InspectorNotification<Network.WebSocketClosedEventDataType>) => void): this;
+        /**
+         * Fired when WebSocket handshake response becomes available.
+         */
+        prependOnceListener(event: "Network.webSocketHandshakeResponseReceived", listener: (message: InspectorNotification<Network.WebSocketHandshakeResponseReceivedEventDataType>) => void): this;
         /**
          * This event is fired instead of `Runtime.executionContextDestroyed` when
          * enabled.
