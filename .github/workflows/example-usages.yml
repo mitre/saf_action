@@ -28,7 +28,7 @@ jobs:
       with:
         command_string: 'validate threshold -i ./test/sample_data/red_hat_good\ with_space.json -I "{\\"error.total\\": 0, \\"compliance.min\\": 50}"'
     - name: Artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       if: success()
       with:
         name: burpsuite

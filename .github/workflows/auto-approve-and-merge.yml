@@ -16,10 +16,16 @@ jobs:
       uses: actions/checkout@v6
       with:
         ref: ${{ github.event.pull_request.head.ref }}
+    - name: Setup node
+      uses: actions/setup-node@v6
+      with:
+        node-version: "24"
+        check-latest: true
+        cache: 'npm'
     - name: Create local changes - install dependencies
       run: npm ci
     - name: Commit & Push Changes
-      uses: actions-js/push@v1.4
+      uses: actions-js/push@v1.5
       with:
         github_token: ${{secrets.GITHUB_TOKEN}}
         branch: 'refs/heads/${{ github.event.pull_request.head.ref }}'
