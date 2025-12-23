@@ -13,6 +13,7 @@ export declare class CookieStorage implements IWindowStorage<string> {
     removeItem(key: string): void;
     getKeys(): string[];
     containsKey(key: string): boolean;
+    decryptData(): Promise<object | null>;
 }
 /**
  * Get cookie expiration time

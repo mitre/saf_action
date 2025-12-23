@@ -23,14 +23,12 @@
   },
   "homepage": "https://github.com/mitre/saf_action#readme",
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.1",
     "@mitre/saf": "^1.5.3",
     "shell-quote": "^1.8.2"
   },
   "devDependencies": {
-    "vitest": "^3.2.4"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.44.1"
+    "@rollup/rollup-linux-x64-gnu": "*",
+    "vitest": "^4.0.16"
   }
 }
