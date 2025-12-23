@@ -1,9 +1,11 @@
 var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 
 // lib/chai/utils/index.js
 var utils_exports = {};
@@ -15,6 +17,7 @@ __export(utils_exports, {
   checkError: () => check_error_exports,
   compareByInspect: () => compareByInspect,
   eql: () => deep_eql_default,
+  events: () => events,
   expectTypes: () => expectTypes,
   flag: () => flag,
   getActual: () => getActual,
@@ -142,19 +145,10 @@ __name(type, "type");
 
 // node_modules/assertion-error/index.js
 var canElideFrames = "captureStackTrace" in Error;
-var AssertionError = class _AssertionError extends Error {
-  static {
-    __name(this, "AssertionError");
-  }
-  message;
-  get name() {
-    return "AssertionError";
-  }
-  get ok() {
-    return false;
-  }
+var _AssertionError = class _AssertionError extends Error {
   constructor(message = "Unspecified AssertionError", props, ssf) {
     super(message);
+    __publicField(this, "message");
     this.message = message;
     if (canElideFrames) {
       Error.captureStackTrace(this, ssf || _AssertionError);
@@ -164,6 +158,12 @@ var AssertionError = class _AssertionError extends Error {
         this[key] = props[key];
       }
     }
+  }
+  get name() {
+    return "AssertionError";
+  }
+  get ok() {
+    return false;
   }
   toJSON(stack) {
     return {
@@ -175,6 +175,8 @@ var AssertionError = class _AssertionError extends Error {
     };
   }
 };
+__name(_AssertionError, "AssertionError");
+var AssertionError = _AssertionError;
 
 // lib/chai/utils/expectTypes.js
 function expectTypes(obj, types) {
@@ -695,8 +697,8 @@ __name(inspectHTML, "inspectHTML");
 
 // node_modules/loupe/lib/index.js
 var symbolsSupported = typeof Symbol === "function" && typeof Symbol.for === "function";
-var chaiInspect = symbolsSupported ? Symbol.for("chai/inspect") : "@@chai/inspect";
-var nodeInspect = Symbol.for("nodejs.util.inspect.custom");
+var chaiInspect = symbolsSupported ? /* @__PURE__ */ Symbol.for("chai/inspect") : "@@chai/inspect";
+var nodeInspect = /* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom");
 var constructorMap = /* @__PURE__ */ new WeakMap();
 var stringTagMap = {};
 var baseTypesMap = {
@@ -741,12 +743,12 @@ var baseTypesMap = {
   HTMLCollection: inspectNodeCollection,
   NodeList: inspectNodeCollection
 };
-var inspectCustom = /* @__PURE__ */ __name((value, options, type3) => {
+var inspectCustom = /* @__PURE__ */ __name((value, options, type3, inspectFn) => {
   if (chaiInspect in value && typeof value[chaiInspect] === "function") {
     return value[chaiInspect](options);
   }
   if (nodeInspect in value && typeof value[nodeInspect] === "function") {
-    return value[nodeInspect](options.depth, options);
+    return value[nodeInspect](options.depth, options, inspectFn);
   }
   if ("inspect" in value && typeof value.inspect === "function") {
     return value.inspect(options.depth, options);
@@ -771,7 +773,7 @@ function inspect(value, opts = {}) {
     return baseTypesMap[type3](value, options);
   }
   if (customInspect && value) {
-    const output = inspectCustom(value, options, type3);
+    const output = inspectCustom(value, options, type3, inspect);
     if (output) {
       if (typeof output === "string")
         return output;
@@ -1361,12 +1363,7 @@ function getPathInfo(obj, path) {
 __name(getPathInfo, "getPathInfo");
 
 // lib/chai/assertion.js
-var Assertion = class _Assertion {
-  static {
-    __name(this, "Assertion");
-  }
-  /** @type {{}} */
-  __flags = {};
+var _Assertion = class _Assertion {
   /**
    * Creates object for chaining.
    * `Assertion` objects contain metadata in the form of flags. Three flags can
@@ -1403,6 +1400,8 @@ var Assertion = class _Assertion {
    * @param {boolean} [lockSsfi] (optional) whether or not the ssfi flag is locked
    */
   constructor(obj, msg, ssfi, lockSsfi) {
+    /** @type {{}} */
+    __publicField(this, "__flags", {});
     flag(this, "ssfi", ssfi || _Assertion);
     flag(this, "lockSsfi", lockSsfi);
     flag(this, "object", obj);
@@ -1538,6 +1537,20 @@ var Assertion = class _Assertion {
     flag(this, "object", val);
   }
 };
+__name(_Assertion, "Assertion");
+var Assertion = _Assertion;
+
+// lib/chai/utils/events.js
+var events = new EventTarget();
+var _PluginEvent = class _PluginEvent extends Event {
+  constructor(type3, name, fn) {
+    super(type3);
+    this.name = String(name);
+    this.fn = fn;
+  }
+};
+__name(_PluginEvent, "PluginEvent");
+var PluginEvent = _PluginEvent;
 
 // lib/chai/utils/isProxyEnabled.js
 function isProxyEnabled() {
@@ -1562,6 +1575,7 @@ function addProperty(ctx, name, getter) {
     }, "propertyGetter"),
     configurable: true
   });
+  events.dispatchEvent(new PluginEvent("addProperty", name, getter));
 }
 __name(addProperty, "addProperty");
 
@@ -1691,6 +1705,7 @@ function addMethod(ctx, name, method) {
   }, "methodWrapper");
   addLengthGuard(methodWrapper, name, false);
   ctx[name] = proxify(methodWrapper, name);
+  events.dispatchEvent(new PluginEvent("addMethod", name, method));
 }
 __name(addMethod, "addMethod");
 
@@ -1757,6 +1772,14 @@ var excludeNames = Object.getOwnPropertyNames(testFn).filter(function(name) {
 });
 var call = Function.prototype.call;
 var apply = Function.prototype.apply;
+var _PluginAddChainableMethodEvent = class _PluginAddChainableMethodEvent extends PluginEvent {
+  constructor(type3, name, fn, chainingBehavior) {
+    super(type3, name, fn);
+    this.chainingBehavior = chainingBehavior;
+  }
+};
+__name(_PluginAddChainableMethodEvent, "PluginAddChainableMethodEvent");
+var PluginAddChainableMethodEvent = _PluginAddChainableMethodEvent;
 function addChainableMethod(ctx, name, method, chainingBehavior) {
   if (typeof chainingBehavior !== "function") {
     chainingBehavior = /* @__PURE__ */ __name(function() {
@@ -1806,6 +1829,14 @@ function addChainableMethod(ctx, name, method, chainingBehavior) {
     }, "chainableMethodGetter"),
     configurable: true
   });
+  events.dispatchEvent(
+    new PluginAddChainableMethodEvent(
+      "addChainableMethod",
+      name,
+      method,
+      chainingBehavior
+    )
+  );
 }
 __name(addChainableMethod, "addChainableMethod");
 
@@ -2927,7 +2958,7 @@ function closeTo(expected, delta, msg) {
     );
   }
   new Assertion(expected, flagMsg, ssfi, true).is.numeric;
-  const abs = /* @__PURE__ */ __name((x) => x < 0n ? -x : x, "abs");
+  const abs = /* @__PURE__ */ __name((x) => x < 0 ? -x : x, "abs");
   const strip = /* @__PURE__ */ __name((number) => parseFloat(parseFloat(number).toPrecision(12)), "strip");
   this.assert(
     strip(abs(obj - expected)) <= delta,
@@ -4139,243 +4170,3 @@ export {
   use,
   utils_exports as util
 };
-/*!
- * Chai - flag utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - test utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - expectTypes utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - getActual utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - message composition utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - transferFlags utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * chai
- * http://chaijs.com
- * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - isProxyEnabled helper
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - addProperty utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - addLengthGuard utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - getProperties utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - proxify utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - addMethod utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - overwriteProperty utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - overwriteMethod utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - addChainingMethod utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - overwriteChainableMethod utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - compareByInspect utility
- * Copyright(c) 2011-2016 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - getOwnEnumerablePropertySymbols utility
- * Copyright(c) 2011-2016 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - getOwnEnumerableProperties utility
- * Copyright(c) 2011-2016 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * Chai - isNaN utility
- * Copyright(c) 2012-2015 Sakthipriyan Vairamani <thechargingvolcano@gmail.com>
- * MIT Licensed
- */
-/*!
- * chai
- * Copyright(c) 2011 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*!
- * chai
- * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-/*! Bundled license information:
-
-deep-eql/index.js:
-  (*!
-   * deep-eql
-   * Copyright(c) 2013 Jake Luer <jake@alogicalparadox.com>
-   * MIT Licensed
-   *)
-  (*!
-   * Check to see if the MemoizeMap has recorded a result of the two operands
-   *
-   * @param {Mixed} leftHandOperand
-   * @param {Mixed} rightHandOperand
-   * @param {MemoizeMap} memoizeMap
-   * @returns {Boolean|null} result
-  *)
-  (*!
-   * Set the result of the equality into the MemoizeMap
-   *
-   * @param {Mixed} leftHandOperand
-   * @param {Mixed} rightHandOperand
-   * @param {MemoizeMap} memoizeMap
-   * @param {Boolean} result
-  *)
-  (*!
-   * Primary Export
-   *)
-  (*!
-   * The main logic of the `deepEqual` function.
-   *
-   * @param {Mixed} leftHandOperand
-   * @param {Mixed} rightHandOperand
-   * @param {Object} [options] (optional) Additional options
-   * @param {Array} [options.comparator] (optional) Override default algorithm, determining custom equality.
-   * @param {Array} [options.memoize] (optional) Provide a custom memoization object which will cache the results of
-      complex objects for a speed boost. By passing `false` you can disable memoization, but this will cause circular
-      references to blow the stack.
-   * @return {Boolean} equal match
-  *)
-  (*!
-   * Compare two Regular Expressions for equality.
-   *
-   * @param {RegExp} leftHandOperand
-   * @param {RegExp} rightHandOperand
-   * @return {Boolean} result
-   *)
-  (*!
-   * Compare two Sets/Maps for equality. Faster than other equality functions.
-   *
-   * @param {Set} leftHandOperand
-   * @param {Set} rightHandOperand
-   * @param {Object} [options] (Optional)
-   * @return {Boolean} result
-   *)
-  (*!
-   * Simple equality for flat iterable objects such as Arrays, TypedArrays or Node.js buffers.
-   *
-   * @param {Iterable} leftHandOperand
-   * @param {Iterable} rightHandOperand
-   * @param {Object} [options] (Optional)
-   * @return {Boolean} result
-   *)
-  (*!
-   * Simple equality for generator objects such as those returned by generator functions.
-   *
-   * @param {Iterable} leftHandOperand
-   * @param {Iterable} rightHandOperand
-   * @param {Object} [options] (Optional)
-   * @return {Boolean} result
-   *)
-  (*!
-   * Determine if the given object has an @@iterator function.
-   *
-   * @param {Object} target
-   * @return {Boolean} `true` if the object has an @@iterator function.
-   *)
-  (*!
-   * Gets all iterator entries from the given Object. If the Object has no @@iterator function, returns an empty array.
-   * This will consume the iterator - which could have side effects depending on the @@iterator implementation.
-   *
-   * @param {Object} target
-   * @returns {Array} an array of entries from the @@iterator function
-   *)
-  (*!
-   * Gets all entries from a Generator. This will consume the generator - which could have side effects.
-   *
-   * @param {Generator} target
-   * @returns {Array} an array of entries from the Generator.
-   *)
-  (*!
-   * Gets all own and inherited enumerable keys from a target.
-   *
-   * @param {Object} target
-   * @returns {Array} an array of own and inherited enumerable keys from the target.
-   *)
-  (*!
-   * Determines if two objects have matching values, given a set of keys. Defers to deepEqual for the equality check of
-   * each key. If any value of the given key is not equal, the function will return false (early).
-   *
-   * @param {Mixed} leftHandOperand
-   * @param {Mixed} rightHandOperand
-   * @param {Array} keys An array of keys to compare the values of leftHandOperand and rightHandOperand against
-   * @param {Object} [options] (Optional)
-   * @return {Boolean} result
-   *)
-  (*!
-   * Recursively check the equality of two Objects. Once basic sameness has been established it will defer to `deepEqual`
-   * for each enumerable key in the object.
-   *
-   * @param {Mixed} leftHandOperand
-   * @param {Mixed} rightHandOperand
-   * @param {Object} [options] (Optional)
-   * @return {Boolean} result
-   *)
-  (*!
-   * Returns true if the argument is a primitive.
-   *
-   * This intentionally returns true for all objects that can be compared by reference,
-   * including functions and symbols.
-   *
-   * @param {Mixed} value
-   * @return {Boolean} result
-   *)
-*/
