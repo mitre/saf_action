@@ -9,5 +9,6 @@ export declare class SessionStorage implements IWindowStorage<string> {
     removeItem(key: string): void;
     getKeys(): string[];
     containsKey(key: string): boolean;
+    decryptData(): Promise<object | null>;
 }
 //# sourceMappingURL=SessionStorage.d.ts.map

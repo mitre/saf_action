@@ -11,5 +11,6 @@ export declare class MemoryStorage<T> implements IWindowStorage<T> {
     getKeys(): string[];
     containsKey(key: string): boolean;
     clear(): void;
+    decryptData(): Promise<object | null>;
 }
 //# sourceMappingURL=MemoryStorage.d.ts.map
