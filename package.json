@@ -28,6 +28,7 @@
     "shell-quote": "^1.8.2"
   },
   "devDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "*",
     "vitest": "^4.0.16"
   }
 }
