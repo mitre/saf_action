@@ -29,6 +29,6 @@
   },
   "devDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.17"
   }
 }
