@@ -1,4 +1,4 @@
-# saf_action
+test# saf_action
 GitHub Action for the [SAF CLI](https://github.com/mitre/saf)
 
 ## Input and Output Arguments
