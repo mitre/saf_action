@@ -19,5 +19,7 @@ jobs:
         node-version: "24"
         check-latest: true
         cache: 'npm'
+    - name: Install packages
+      run: 'npm ci --include=optional'
     - name: Run Tests
       run: 'npm run test:ci'
