@@ -93,7 +93,7 @@ var passportRegexByCountryCode = {
   // MOZAMBIQUE
   MY: /^[AHK]\d{8}$/,
   // MALAYSIA
-  MX: /^\d{10,11}$/,
+  MX: /^[A-Z]\d{8}$/,
   // MEXICO
   NL: /^[A-Z]{2}[A-Z0-9]{6}\d$/,
   // NETHERLANDS

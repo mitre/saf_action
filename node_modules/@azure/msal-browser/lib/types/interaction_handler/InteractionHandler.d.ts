@@ -1,4 +1,5 @@
 import { AuthorizationCodePayload, CommonAuthorizationCodeRequest, AuthorizationCodeClient, CcsCredential, Logger, IPerformanceClient, AuthorizeResponse, CommonAuthorizationUrlRequest } from "@azure/msal-common/browser";
+import { ApiId } from "../utils/BrowserConstants.js";
 import { BrowserCacheManager } from "../cache/BrowserCacheManager.js";
 import { AuthenticationResult } from "../response/AuthenticationResult.js";
 /**
@@ -15,16 +16,15 @@ export declare class InteractionHandler {
      * Function to handle response parameters from hash.
      * @param locationHash
      */
-    handleCodeResponse(response: AuthorizeResponse, request: CommonAuthorizationUrlRequest): Promise<AuthenticationResult>;
+    handleCodeResponse(response: AuthorizeResponse, request: CommonAuthorizationUrlRequest, apiId: ApiId): Promise<AuthenticationResult>;
     /**
      * Process auth code response from AAD
      * @param authCodeResponse
-     * @param state
-     * @param authority
-     * @param networkModule
+     * @param request
+     * @param validateNonce
      * @returns
      */
-    handleCodeResponseFromServer(authCodeResponse: AuthorizationCodePayload, request: CommonAuthorizationUrlRequest, validateNonce?: boolean): Promise<AuthenticationResult>;
+    handleCodeResponseFromServer(authCodeResponse: AuthorizationCodePayload, request: CommonAuthorizationUrlRequest, apiId: ApiId, validateNonce?: boolean): Promise<AuthenticationResult>;
     /**
      * Build ccs creds if available
      */

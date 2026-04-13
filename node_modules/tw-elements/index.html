@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>TW Elements</title>
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <!-- Roboto font -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap"
+      rel="stylesheet" />
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com/3.3.0"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          fontFamily: {
+            sans: ["Roboto", "sans-serif"],
+            body: ["Roboto", "sans-serif"],
+            mono: ["ui-monospace", "monospace"],
+          },
+        },
+        corePlugins: {
+          preflight: false,
+        },
+      };
+    </script>
+    <!-- TW Elements CSS -->
+    <link rel="stylesheet" href="css/tw-elements.min.css" />
+    <!-- Custom styles -->
+    <style></style>
+  </head>
+
+  <body class="dark:bg-neutral-800">
+    <!-- Start your project here-->
+    <div class="flex flex-col items-center justify-center lg:h-screen">
+      <div
+        class="mx-auto max-w-[540px] sm:max-w-[604px] md:max-w-[720px] lg:max-w-[972px] xl:max-w-full xl:px-12 2xl:max-w-[1400px]">
+        <div class="mt-[50px] text-center lg:mt-0">
+          <div
+            class="mb-4 flex items-center justify-center text-[40px] font-medium dark:text-neutral-100">
+            <picture>
+              <source
+                srcset="
+                  https://tecdn.b-cdn.net/img/logo/te-transparent-noshadows.webp
+                "
+                type="image/webp" />
+              <img
+                src="https://tecdn.b-cdn.net/img/logo/te-transparent-noshadows.png"
+                class="mb-1 h-24"
+                alt="logo" />
+            </picture>
+          </div>
+          <div>
+            <h5 class="mb-4 text-xl font-medium dark:text-neutral-200">
+              Thank you for using our product. We're glad you're with us.
+            </h5>
+            <p class="mb-4">TW Elements Team</p>
+            <a
+              class="inline-block rounded bg-primary px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+              data-twe-ripple-init
+              data-twe-ripple-color="white"
+              href="https://tw-elements.com/docs/standard/getting-started/quick-start/"
+              target="_blank"
+              role="button"
+              >Start TWE tutorial</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End your project here-->
+  </body>
+  <!-- TW Elements JS -->
+  <script type="text/javascript" src="js/tw-elements.umd.min.js"></script>
+  <!-- Custom scripts -->
+  <script type="text/javascript"></script>
+</html>

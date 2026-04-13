@@ -1,8 +1,12 @@
 name: Build and Pack TS-InSpec-Objects
+
 on:
   push:
     branches: [ main ]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -10,10 +14,10 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-     - uses: actions/checkout@v4
+     - uses: actions/checkout@v5
 
      - name: Setup Node.js
-       uses: actions/setup-node@v4
+       uses: actions/setup-node@v6
        with:
         node-version: 22
         cache: 'npm'

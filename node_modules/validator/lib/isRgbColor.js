@@ -26,7 +26,7 @@ function isRgbColor(str, options) {
     includePercentValues = options.includePercentValues !== undefined ? options.includePercentValues : includePercentValues;
   }
   if (allowSpaces) {
-    // make sure it starts with continous rgba? without spaces before stripping
+    // make sure it starts with continuous rgba? without spaces before stripping
     if (!startsWithRgb.test(str)) {
       return false;
     }

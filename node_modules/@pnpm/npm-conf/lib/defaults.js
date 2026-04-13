@@ -124,7 +124,7 @@ Object.defineProperty(exports, 'defaults', {
 			'prefer-offline': false,
 			'prefer-online': false,
 			prefix: globalPrefix,
-			production: process.env.NODE_ENV === 'production',
+			production: false,
 			'progress': !process.env.TRAVIS && !process.env.CI,
 			provenance: false,
 			proxy: null,

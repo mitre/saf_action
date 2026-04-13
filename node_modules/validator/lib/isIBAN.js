@@ -108,10 +108,7 @@ function hasOnlyValidCountryCodes(countryCodeArray) {
   var countryCodeArrayFilteredWithObjectIbanCode = countryCodeArray.filter(function (countryCode) {
     return !(countryCode in ibanRegexThroughCountryCode);
   });
-  if (countryCodeArrayFilteredWithObjectIbanCode.length > 0) {
-    return false;
-  }
-  return true;
+  return countryCodeArrayFilteredWithObjectIbanCode.length === 0;
 }
 
 /**

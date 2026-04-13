@@ -991,68 +991,87 @@ function plPlCheck(tin) {
 }
 
 /*
-* pt-BR validation function
-* (Cadastro de Pessoas Físicas (CPF, persons)
-* Cadastro Nacional de Pessoas Jurídicas (CNPJ, entities)
-* Both inputs will be validated
-*/
+ * pt-BR validation function
+ * (Cadastro de Pessoas Físicas (CPF, persons)
+ * Cadastro Nacional de Pessoas Jurídicas (CNPJ, entities)
+ * Both inputs will be validated.
+ * CPF accepts formatted (XXX.XXX.XXX-XX) and unformatted input;
+ * formatting is stripped before validation.
+ * CNPJ supports both numeric (legacy) and alphanumeric format (starting July 2026).
+ */
 
+/**
+ * Convert a CNPJ character to its numeric value for check digit calculation.
+ * Numbers 0-9 map to values 0-9, letters A-Z map to values 17-42.
+ * This is done by subtracting 48 from the ASCII code.
+ */
+function cnpjCharToValue(_char) {
+  return _char.charCodeAt(0) - 48;
+}
+
+/**
+ * Validate CNPJ (both numeric and alphanumeric formats).
+ * Algorithm: module 11 with weights 2-9 from right to left.
+ */
+function validateCnpj(cnpj) {
+  // Get the 12 identifier characters and 2 check digits
+  var identifiers = cnpj.substring(0, 12).toUpperCase();
+  var checkDigits = cnpj.substring(12);
+
+  // Reject CNPJs with all same characters (e.g., '00000000000000', 'AAAAAAAAAAAAAA')
+  if (/^(.)\1+$/.test(cnpj.toUpperCase())) {
+    return false;
+  }
+
+  // Calculate first check digit
+  var sum = 0;
+  var weight = 5;
+  for (var i = 0; i < 12; i++) {
+    sum += cnpjCharToValue(identifiers.charAt(i)) * weight;
+    weight = weight === 2 ? 9 : weight - 1;
+  }
+  var remainder = sum % 11;
+  var firstDV = remainder < 2 ? 0 : 11 - remainder;
+  if (firstDV !== parseInt(checkDigits.charAt(0), 10)) {
+    return false;
+  }
+
+  // Calculate second check digit (includes first check digit)
+  sum = 0;
+  weight = 6;
+  for (var _i8 = 0; _i8 < 12; _i8++) {
+    sum += cnpjCharToValue(identifiers.charAt(_i8)) * weight;
+    weight = weight === 2 ? 9 : weight - 1;
+  }
+  sum += firstDV * 2;
+  remainder = sum % 11;
+  var secondDV = remainder < 2 ? 0 : 11 - remainder;
+  return secondDV === parseInt(checkDigits.charAt(1), 10);
+}
 function ptBrCheck(tin) {
+  // Strip CPF formatting (XXX.XXX.XXX-XX)
+  tin = tin.replace(/[.\-/]/g, '');
   if (tin.length === 11) {
-    var _sum;
+    var sum;
     var remainder;
-    _sum = 0;
+    sum = 0;
     if (
     // Reject known invalid CPFs
     tin === '11111111111' || tin === '22222222222' || tin === '33333333333' || tin === '44444444444' || tin === '55555555555' || tin === '66666666666' || tin === '77777777777' || tin === '88888888888' || tin === '99999999999' || tin === '00000000000') return false;
-    for (var i = 1; i <= 9; i++) _sum += parseInt(tin.substring(i - 1, i), 10) * (11 - i);
-    remainder = _sum * 10 % 11;
+    for (var i = 1; i <= 9; i++) sum += parseInt(tin.substring(i - 1, i), 10) * (11 - i);
+    remainder = sum * 10 % 11;
     if (remainder === 10) remainder = 0;
     if (remainder !== parseInt(tin.substring(9, 10), 10)) return false;
-    _sum = 0;
-    for (var _i8 = 1; _i8 <= 10; _i8++) _sum += parseInt(tin.substring(_i8 - 1, _i8), 10) * (12 - _i8);
-    remainder = _sum * 10 % 11;
+    sum = 0;
+    for (var _i9 = 1; _i9 <= 10; _i9++) sum += parseInt(tin.substring(_i9 - 1, _i9), 10) * (12 - _i9);
+    remainder = sum * 10 % 11;
     if (remainder === 10) remainder = 0;
     if (remainder !== parseInt(tin.substring(10, 11), 10)) return false;
     return true;
   }
-  if (
-  // Reject know invalid CNPJs
-  tin === '00000000000000' || tin === '11111111111111' || tin === '22222222222222' || tin === '33333333333333' || tin === '44444444444444' || tin === '55555555555555' || tin === '66666666666666' || tin === '77777777777777' || tin === '88888888888888' || tin === '99999999999999') {
-    return false;
-  }
-  var length = tin.length - 2;
-  var identifiers = tin.substring(0, length);
-  var verificators = tin.substring(length);
-  var sum = 0;
-  var pos = length - 7;
-  for (var _i9 = length; _i9 >= 1; _i9--) {
-    sum += identifiers.charAt(length - _i9) * pos;
-    pos -= 1;
-    if (pos < 2) {
-      pos = 9;
-    }
-  }
-  var result = sum % 11 < 2 ? 0 : 11 - sum % 11;
-  if (result !== parseInt(verificators.charAt(0), 10)) {
-    return false;
-  }
-  length += 1;
-  identifiers = tin.substring(0, length);
-  sum = 0;
-  pos = length - 7;
-  for (var _i0 = length; _i0 >= 1; _i0--) {
-    sum += identifiers.charAt(length - _i0) * pos;
-    pos -= 1;
-    if (pos < 2) {
-      pos = 9;
-    }
-  }
-  result = sum % 11 < 2 ? 0 : 11 - sum % 11;
-  if (result !== parseInt(verificators.charAt(1), 10)) {
-    return false;
-  }
-  return true;
+
+  // CNPJ validation (supports both numeric and alphanumeric formats)
+  return validateCnpj(tin);
 }
 
 /*
@@ -1296,7 +1315,7 @@ var taxIdFormat = {
   'mt-MT': /^\d{3,7}[APMGLHBZ]$|^([1-8])\1\d{7}$/i,
   'nl-NL': /^\d{9}$/,
   'pl-PL': /^\d{10,11}$/,
-  'pt-BR': /(?:^\d{11}$)|(?:^\d{14}$)/,
+  'pt-BR': /(?:^\d{3}\.\d{3}\.\d{3}-\d{2}$)|(?:^\d{11}$)|(?:^[A-Z0-9]{12}\d{2}$)/i,
   'pt-PT': /^\d{9}$/,
   'ro-RO': /^\d{13}$/,
   'sk-SK': /^\d{6}\/{0,1}\d{3,4}$/,
