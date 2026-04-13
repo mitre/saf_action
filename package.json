@@ -4,7 +4,8 @@
   "description": "GitHub Action for the [SAF CLI](https://github.com/mitre/saf)",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "test:ci": "vitest run"
   },
   "repository": {
     "type": "git",
