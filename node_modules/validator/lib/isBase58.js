@@ -10,10 +10,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 var base58Reg = /^[A-HJ-NP-Za-km-z1-9]*$/;
 function isBase58(str) {
   (0, _assertString.default)(str);
-  if (base58Reg.test(str)) {
-    return true;
-  }
-  return false;
+  return base58Reg.test(str);
 }
 module.exports = exports.default;
 module.exports.default = exports.default;

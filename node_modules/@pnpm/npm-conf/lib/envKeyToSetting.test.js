@@ -37,6 +37,10 @@ const fixtures = [
 		'_always_auth',
 		'_always-auth',
 	],
+	[
+		'//pkgs.dev.azure.com/azure-devops-org/_packaging/feed-name/npm/registry/:_authtoken',
+		'//pkgs.dev.azure.com/azure-devops-org/_packaging/feed-name/npm/registry/:_authToken',
+	],
 ];
 
 test('envKeyToSetting()', () => {

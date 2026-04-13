@@ -1,6 +1,6 @@
 {
   "name": "saf_action",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "GitHub Action for the [SAF CLI](https://github.com/mitre/saf)",
   "main": "index.js",
   "scripts": {
@@ -25,11 +25,10 @@
   "homepage": "https://github.com/mitre/saf_action#readme",
   "dependencies": {
     "@actions/core": "^2.0.1",
-    "@mitre/saf": "^1.5.3",
+    "@mitre/saf": "^1.6.0",
     "shell-quote": "^1.8.2"
   },
   "devDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "*",
     "vitest": "^4.0.16"
   }
 }

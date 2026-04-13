@@ -55,7 +55,14 @@ const parseField = (types, field, key) => {
 		}
 	}
 
-	field = envReplace(field, process.env);
+	const processedField = envReplace(field, process.env);
+	// Skip environment variable substitution for tokenHelper to prevent command injection
+	// via attacker-controlled environment variables
+	if ((key.endsWith(':tokenHelper') || key === 'tokenHelper') && processedField !== field) {
+		throw new Error(`It is not allowed to use environment variables in the value of the ${key} setting.`);
+	} else {
+		field = processedField;
+	}
 
 	if (isPath) {
 		const regex = process.platform === 'win32' ? /^~(\/|\\)/ : /^~\//;

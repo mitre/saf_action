@@ -5,7 +5,7 @@ module.exports = function (x) {
 	}
 	const firstPart = x.substr(0, colonIndex);
 	const secondPart = x.substr(colonIndex + 1);
-	return `${normalize(firstPart)}:${normalize(secondPart)}`;
+	return `${firstPart}:${normalize(secondPart)}`;
 }
 
 function normalize (s) {

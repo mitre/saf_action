@@ -172,24 +172,14 @@ var validators = {
 
     // sanitize user input
     var sanitized = str.trim();
-
-    // validate the data structure
-    if (!NIN.test(sanitized)) {
-      return false;
-    }
-    return true;
+    return NIN.test(sanitized);
   },
   'ar-TN': function arTN(str) {
     var DNI = /^\d{8}$/;
 
     // sanitize user input
     var sanitized = str.trim();
-
-    // validate the data structure
-    if (!DNI.test(sanitized)) {
-      return false;
-    }
-    return true;
+    return DNI.test(sanitized);
   },
   'zh-CN': function zhCN(str) {
     var provincesAndCities = ['11',
