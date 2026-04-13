@@ -20,4 +20,4 @@ jobs:
         check-latest: true
         cache: 'npm'
     - name: Run Tests
-      run: 'npm test:ci'
+      run: 'npm run test:ci'
