@@ -209,7 +209,7 @@ function element(matchRoot: boolean): XmlParserNodeWrapper<XmlParserElementNode>
             throw new ParsingError('Failed to parse XML', `Closing tag not matching "${closingTag}"`);
         }
     } else {
-        match(/^<\/[\w-:.\u00C0-\u00FF]+\s*>/);
+        match(/^<\/[\p{L}\p{M}\w\-:.]+\s*>/u);
     }
 
     return {

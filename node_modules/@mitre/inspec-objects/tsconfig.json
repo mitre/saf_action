@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
     "lib": ["esnext"],
+    "target": "esnext",
 
     "module": "nodenext",
     "moduleResolution": "nodenext",
 
-    "rootDir": "src",
-    "outDir": "lib",
-
-    "strict": true,
     "noImplicitAny": true,
 
     "declaration": true,
@@ -24,10 +20,14 @@
 
     "skipLibCheck": true,
 
-    "types": ["node"]
+    "types": ["node"],
+
+    "rootDir": "src",
+    "outDir": "lib"
   },
   "include": [
     "src/**/*",
     "types/*"
-  ]
+  ],
+  "exclude": ["lib", "node_modules"]
 }
